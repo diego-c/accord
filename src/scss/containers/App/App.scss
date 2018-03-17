@@ -1,0 +1,18 @@
+.App {
+    text-align: center;
+    background-color: lightsteelblue;
+    width: 80%;
+    margin: 0 auto;
+    & h1 {
+        background-color: 'blue';
+        color: red;
+        text-decoration: underline; 
+    }
+    & p {
+        color: magenta;
+        text-decoration: underline;
+    }    
+    & h3 {
+        text-decoration: line-through;
+    }
+}
