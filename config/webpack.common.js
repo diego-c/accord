@@ -82,13 +82,16 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(jpe?g|gif|png|webm|avi|mkv|mp(3|4)|flac|webp)$/,
+                test: /\.(jpe?g|gif|png|svg|webm|avi|mkv|mp(3|4)|flac|webp)$/,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
                             limit: 1024 * 10,
-                            fallback: 'file-loader'
+                            fallback: 'file-loader',
+                            name: '[name].[hash].[ext]',
+                            publicPath: '/assets/',
+                            outputPath: 'assets'
                         }
                     }
                 ]

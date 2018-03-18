@@ -16,3 +16,12 @@
         text-decoration: line-through;
     }
 }
+
+.Image {
+    margin: 0 auto;
+    max-width: 320px;
+    & img {
+        display: inline-block;
+        width: 100%;
+    }
+}
