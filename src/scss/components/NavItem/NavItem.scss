@@ -1,0 +1,16 @@
+.NavItem {
+    text-align: center;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & a {
+        text-decoration: none;
+        color: rgb(86, 228, 67)
+    }
+}
+
+.NavLogo {
+    flex-basis: 50%;
+}

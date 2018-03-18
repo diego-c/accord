@@ -1,5 +1,6 @@
 const path = require('path'),
-    HTMLWebpackPlugin = require('html-webpack-plugin')
+    HTMLWebpackPlugin = require('html-webpack-plugin'),
+    PWAManifest = require('webpack-pwa-manifest');
 
 module.exports = {
     entry: {
