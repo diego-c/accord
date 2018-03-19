@@ -1,14 +1,31 @@
 import * as React from 'react';
 import classes from '../scss/containers/App/App.scss';
 import { NavLayout } from './Nav/NavLayout';
-import { connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { State, User } from '../redux/state/initialState';
 import { loadUser } from '../redux/actions/actions';
+import { UserAction } from '../redux/actions/userActions';
 
 interface AppProps {
-    project: string
+    project: string,
+    loadUser: (user: User) => UserAction,
+    user: User
 }
-class App extends React.Component<AppProps, Object> {
+
+class App extends React.Component<AppProps, State> {
+
+    componentDidMount() {
+        this.props.loadUser({
+            id: 1,
+            username: 'diego'
+        });
+    }
+
+    componentDidUpdate() {
+        const { user } = this.props;
+        console.log('user: \n' + JSON.stringify(user, null, 2));
+    }
+
     render() {
         return (
             <div className={classes.App}>
@@ -25,14 +42,12 @@ const mapStateToProps = (state: State): State => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function, user: User) => {
-    return {
-        loadUser: dispatch(loadUser(user))
-    }
-}
+const mapDispatchToProps = (dispatch: any) => ({
+    loadUser: (user: User) => dispatch(loadUser(user))
+})
 
-export { App }
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 // TODO: see how to use react-redux with typescript
 // type checking for App fails
-//const mappedApp = connect(mapStateToProps, mapDispatchToProps)(App)
+// see https://github.com/piotrwitek/react-redux-typescript-guide

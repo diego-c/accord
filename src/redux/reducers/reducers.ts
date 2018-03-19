@@ -1,9 +1,8 @@
-import { State } from "../state/initialState";
+import { State, initialState } from "../state/initialState";
 import { actionTypes } from "../actions/actionTypes";
-import { UserAction } from "../actions/userActions";
 import { Reducer } from "redux";
 
-export const reducer: Reducer<State> = (state, action) => {
+export const reducer: Reducer<State> = (state = initialState, action) => {
     if (action.type === actionTypes.LOAD_USER) {
         return {
             user: {

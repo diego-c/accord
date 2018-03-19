@@ -1,9 +1,10 @@
 import { User } from '../state/initialState';
-import { Action } from 'redux';
 import { actionTypes } from './actionTypes';
+import { UserAction } from './userActions';
 
-export const loadUser = (user: User): Action => (
+export const loadUser = (user: User): UserAction => (
     {
-        type: actionTypes.LOAD_USER
+        type: actionTypes.LOAD_USER,
+        payload: user
     }
 );
