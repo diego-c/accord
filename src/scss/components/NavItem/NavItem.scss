@@ -13,4 +13,9 @@
 
 .NavLogo {
     flex-basis: 50%;
+
+    & a {
+        font-family: 'Audiowide', cursive;
+        font-size: 2.5rem;
+    }
 }

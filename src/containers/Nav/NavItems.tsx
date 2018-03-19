@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { NavItem } from '../components/NavItem/NavItem';
-import classes from '../scss/containers/Nav/Nav.scss';
+import classes from '../../scss/containers/Nav/NavItems.scss';
 
 interface NavState {
     isLoggedIn: boolean
@@ -10,14 +9,14 @@ interface NavProps<T> {
     children: Array<T>
 }
 
-export class Nav extends React.Component<NavProps<React.ReactChild>, NavState> {
+export class NavItems extends React.Component<NavProps<React.ReactChild>, NavState> {
     state = {
         isLoggedIn: false
     }
 
     render() {
         return (
-            <div className={classes.Nav}>
+            <div className={classes.NavItems}>
                 {this.props.children}
             </div>
         )

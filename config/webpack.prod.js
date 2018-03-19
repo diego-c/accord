@@ -8,6 +8,25 @@ module.exports = merge(common, {
     entry: {
         bundle: ['babel-polyfill', path.resolve(__dirname, '../src/index.tsx')]
     },
+    module: {
+        rules: [
+            {
+                test: /\.(jpe?g|gif|png|svg|webm|avi|mkv|mp(3|4)|flac|webp)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 1024 * 10,
+                            fallback: 'file-loader',
+                            name: '[name].[hash].[ext]',
+                            publicPath: '/assets/',
+                            outputPath: 'assets'
+                        }
+                    }
+                ]
+            }
+        ]
+    },
     plugins: [
         new webpack.DefinePlugin({
             "__PRODUCTION__": JSON.stringify(true)

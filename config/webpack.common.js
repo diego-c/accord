@@ -81,21 +81,6 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            {
-                test: /\.(jpe?g|gif|png|svg|webm|avi|mkv|mp(3|4)|flac|webp)$/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 1024 * 10,
-                            fallback: 'file-loader',
-                            name: '[name].[hash].[ext]',
-                            publicPath: '/assets/',
-                            outputPath: 'assets'
-                        }
-                    }
-                ]
             }
         ]
     },
@@ -109,6 +94,10 @@ module.exports = {
     ],
     externals: {
         "react": "React",
-        "react-dom": "ReactDOM"
+        "react-dom": "ReactDOM",
+        "react-router": "ReactRouter",
+        "react-router-dom": "ReactRouterDOM",
+        "redux": "Redux",
+        "react-redux": "ReactRedux"
     }
 }
