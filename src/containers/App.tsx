@@ -15,15 +15,9 @@ interface AppProps {
 class App extends React.Component<AppProps, State> {
 
     componentDidMount() {
-        this.props.loadUser({
-            id: 1,
-            username: 'diego'
-        });
-    }
-
-    componentDidUpdate() {
-        const { user } = this.props;
-        console.log('user: \n' + JSON.stringify(user, null, 2));
+        fetch('http://localhost:3000/api/user')
+            .then((res: Response) => res.json())
+            .then(txt => console.log(txt));
     }
 
     render() {

@@ -20,5 +20,4 @@ export class NavLayout extends React.Component {
             </NavItems >
         )
     }
-
 }

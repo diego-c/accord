@@ -4,14 +4,18 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --config config/webpack.dev.js --hot --colors --progress --mode development --open",
+    "client": "webpack-dev-server --config config/webpack.dev.js --hot --colors --progress --mode development --open",
+    "server": "cd server && node index.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "build": "webpack -p --config config/webpack.prod.js --colors --progress"
   },
+  "proxy": "http://localhost:3000",
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.42",
     "@babel/preset-react": "^7.0.0-beta.42",
     "@babel/preset-stage-2": "^7.0.0-beta.42",
+    "@types/express": "^4.11.1",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
     "@types/react-redux": "^5.0.15",
@@ -37,6 +41,8 @@
     "webpack-pwa-manifest": "^3.6.2"
   },
   "dependencies": {
+    "concurrently": "^3.5.1",
+    "express": "^4.16.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
