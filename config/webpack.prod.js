@@ -6,7 +6,7 @@ const common = require('./webpack.common')
 
 module.exports = merge(common, {
     entry: {
-        bundle: ['babel-polyfill', path.resolve(__dirname, '../src/index.tsx')]
+        bundle: ['babel-polyfill', path.resolve(__dirname, '../client/index.tsx')]
     },
     module: {
         rules: [
@@ -39,7 +39,7 @@ module.exports = merge(common, {
             background_color: '#dbdbdb',
             icons: [
                 {
-                    src: path.resolve(__dirname, '../src/', 'img/accord-logo.svg'),
+                    src: path.resolve(__dirname, '../client/', 'img/accord-logo.svg'),
                     sizes: [96, 128, 144, 192, 256, 384, 512],
                     destination: './icons/'
                 }

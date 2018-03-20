@@ -4,7 +4,7 @@ const path = require('path'),
 
 module.exports = {
     entry: {
-        bundle: path.resolve(__dirname, '../src/index.tsx')
+        bundle: path.resolve(__dirname, '../client/index.tsx')
     },
     output: {
         filename: './js/[name]_[hash].js',
@@ -23,7 +23,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                include: path.resolve(__dirname, '../src'),
+                include: path.resolve(__dirname, '../client'),
                 use: [
                     {
                         loader: 'babel-loader'
@@ -75,7 +75,7 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             includePaths: [
-                                path.resolve(__dirname, '../src/', 'scss/')
+                                path.resolve(__dirname, '../client/', 'scss/')
                             ],
                             sourceMap: true
                         }
@@ -86,7 +86,7 @@ module.exports = {
     },
     plugins: [
         new HTMLWebpackPlugin({
-            template: path.resolve(__dirname, '../src/', 'index.html'),
+            template: path.resolve(__dirname, '../client/', 'index.html'),
             title: 'React-TS App',
             cache: true,
             inject: 'body'

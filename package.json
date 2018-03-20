@@ -16,6 +16,7 @@
     "@babel/preset-react": "^7.0.0-beta.42",
     "@babel/preset-stage-2": "^7.0.0-beta.42",
     "@types/express": "^4.11.1",
+    "@types/pg": "^7.4.5",
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
     "@types/react-redux": "^5.0.15",
@@ -41,8 +42,11 @@
     "webpack-pwa-manifest": "^3.6.2"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "concurrently": "^3.5.1",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "pg": "^7.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { fetch } from '../axios/connect';
 import classes from '../scss/containers/App/App.scss';
 import { NavLayout } from './Nav/NavLayout';
 import { connect } from 'react-redux';
@@ -16,9 +17,10 @@ interface AppProps {
 class App extends React.Component<AppProps, State> {
 
     componentDidMount() {
-        fetch('http://localhost:3000/api/user')
-            .then((res: Response) => res.json())
-            .then(txt => console.log(txt));
+        fetch('/user')
+            .then(res => res.data)
+            .then(console.log)
+            .catch(err => console.log('Oops! \n' + err));
     }
 
     render() {
