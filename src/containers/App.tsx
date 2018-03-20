@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { State, User } from '../redux/state/initialState';
 import { loadUser } from '../redux/actions/actions';
 import { UserAction } from '../redux/actions/userActions';
+import { MainLayout } from '../components/MainLayout/MainLayout';
 
 interface AppProps {
     project: string,
@@ -24,7 +25,7 @@ class App extends React.Component<AppProps, State> {
         return (
             <div className={classes.App}>
                 <NavLayout />
-                <h1>Welcome to {this.props.project}</h1>
+                <MainLayout isSignedIn={false} />
             </div>
         )
     }
