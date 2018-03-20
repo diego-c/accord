@@ -11,7 +11,8 @@ app.get('/api/user', (_, res) => {
     res.json({
         user: {
             username: "diego",
-            id: 1
+            id: 5,
+            message: 'haha'
         }
     });
 });

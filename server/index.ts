@@ -8,7 +8,8 @@ app.get('/api/user', (_, res: Response) => {
     res.json({
         user: {
             username: "diego",
-            id: 1
+            id: 5,
+            message: 'haha'
         }
     })
 })

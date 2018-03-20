@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "client": "webpack-dev-server --config config/webpack.dev.js --hot --colors --progress --mode development --open",
-    "server": "cd server && node index.js",
+    "server": "cd server && nodemon index.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "build": "webpack -p --config config/webpack.prod.js --colors --progress"
   },
@@ -48,6 +48,7 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   }
 }
