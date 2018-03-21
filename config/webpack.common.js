@@ -99,6 +99,7 @@ module.exports = {
         "react-router-dom": "ReactRouterDOM",
         "redux": "Redux",
         "redux-thunk": "ReduxThunk",
-        "react-redux": "ReactRedux"
+        "react-redux": "ReactRedux",
+        "axios": "axios"
     }
 }

@@ -16,19 +16,15 @@ const express_1 = __importDefault(require("express"));
 const connect_1 = require("./db/connect");
 const app = express_1.default();
 const port = process.env.PORT || 3000;
-const query = 'SELECT * FROM user_data';
-connect_1.connect(query)
-    .then(res => res.rows.map(result => ({ username: result.username, joined: result.joined })), console.log)
-    .then(console.log);
 app.get('/api/user', (req, res) => {
     const hostname = req.hostname;
     res.header('Access-Control-Allow-Origin', `http://${hostname}:1337`);
-    res.json({
-        user: {
-            username: "diego",
-            id: 5,
-            message: 'haha'
-        }
-    });
+    connect_1.connect('SELECT * FROM user_data')
+        .then(result => result.rows.map(row => ({
+        username: row.username,
+        joined: row.joined
+    })))
+        .then(users => res.status(200).json(users))
+        .catch(console.log);
 });
 app.listen(port, () => console.log('listening on port ' + port + '...'));
