@@ -13,18 +13,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path = __importStar(require("path"));
 require('dotenv').config({ path: path.resolve(process.cwd(), '../.env') });
 const express_1 = __importDefault(require("express"));
-const connect_1 = require("./db/connect");
+const routes_1 = require("./routes/routes");
+const cors_1 = require("./middleware/cors");
+// import { connect } from './db/connect';
 const app = express_1.default();
 const port = process.env.PORT || 3000;
-app.get('/api/user', (req, res) => {
-    const hostname = req.hostname;
-    res.header('Access-Control-Allow-Origin', `http://${hostname}:1337`);
-    connect_1.connect('SELECT * FROM user_data')
-        .then(result => result.rows.map(row => ({
-        username: row.username,
-        joined: row.joined
-    })))
-        .then(users => res.status(200).json(users))
-        .catch(console.log);
-});
+app.use('/api', cors_1.cors, express_1.default.json(), routes_1.router);
 app.listen(port, () => console.log('listening on port ' + port + '...'));

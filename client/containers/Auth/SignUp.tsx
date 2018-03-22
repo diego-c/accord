@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { AxiosResponse } from 'axios';
+import { fetch } from '../../axios/connect';
 
 export interface signUpProps {
     isSignedIn: boolean
@@ -27,6 +29,13 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
     onSubmit = () => {
         if (this.state.username && this.state.password) {
             console.log('Signing up as: \n' + JSON.stringify(this.state));
+
+            fetch.post('/signup', {
+                username: this.state.username,
+                password: this.state.password
+            })
+                .then((res: AxiosResponse) => console.log('From the server: \n' + JSON.stringify(res.data, null, 2)))
+                .catch((err: Error) => console.log('Oops! \n' + err))
         }
     }
 
