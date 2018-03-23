@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.resolve(process.cwd(), '../.env') });
 import express from 'express';
 import { router } from './routes/routes';
 import { cors } from './middleware/cors';
+// import { validateUser } from './middleware/validation';
 // import { connect } from './db/connect';
 
 const app: express.Express = express();

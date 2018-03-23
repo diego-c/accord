@@ -75,7 +75,9 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
         }
     }
 
-    onSubmit = () => {
+    onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
         if (this.state.username && this.state.password) {
             console.log('Signing up as: \n' + JSON.stringify(this.state));
 
@@ -94,6 +96,7 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
                         <input
                             type="email"
                             name="email"
+                            required
                             onChange={e => this.onInputChange(e)}
                             value={this.state.email} />
                     </p>
@@ -101,6 +104,7 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
                         <input
                             type="text"
                             name="username"
+                            required
                             onChange={e => this.onInputChange(e)}
                             value={this.state.username} />
                     </p>
@@ -108,6 +112,7 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
                          <input
                             type="password"
                             name="password"
+                            required
                             onChange={e => this.onInputChange(e)}
                             value={this.state.password} />
                     </p>
@@ -130,10 +135,11 @@ export class SignUp extends React.Component<signUpProps, signUpState> {
                          <input
                             type="date"
                             name="birthdate"
+                            required
                             onChange={e => this.onInputChange(e)}
                             value={this.state.birthdate} />
                     </p>
-                    <button onClick={this.onSubmit}>
+                    <button onClick={e => this.onSubmit(e)}>
                         Sign Up
                     </button>
                 </div>

@@ -1,14 +1,56 @@
 import * as express from 'express';
 // import { connect } from '../db/connect';
-// import { User, Login } from '../db/schema';
+import { Validation, validateSignUp } from '../utils/SignUpValidation';
+import { SignUp, User } from '../db/schema';
+import { Hashed, hashPassword } from '../utils/HashPassword';
+import { connect } from '../db/connect';
+import { QueryResult } from 'pg';
 const router: express.Router = express.Router();
 
 router
     .post('/signup', (req: express.Request, res: express.Response) => {
-        const user = req.body;
+        const user: any = req.body;
 
-        console.log('New User: \n' + JSON.stringify(user, null, 2));
-        res.json(user);
+        const validation: boolean | Validation = validateSignUp(user);
+
+        if (typeof validation === 'boolean' && validation === false) {
+            return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' })
+        } else {
+            const valid: boolean = Object.keys(validation).every((key: string) => (validation as any)[key])
+
+            if (valid) {
+                const validInfo: SignUp = { ...user } as SignUp;
+                const hashed: Hashed = hashPassword(validInfo.password);
+
+                const validUser: User = {
+                    username: validInfo.username,
+                    email: validInfo.email,
+                    hash: hashed.hash,
+                    salt: hashed.salt,
+                    birthdate: validInfo.birthdate,
+                    gender: validInfo.gender
+                }
+
+                const query: string = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6)'
+
+                // TODO: connection fails, throws 500
+                connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
+                    .then((result: QueryResult) => {
+                        return res.status(200).json({ result });
+                    })
+                    .catch((error: Error) => {
+                        return res.status(500).json({ error });
+                    })
+
+            } else {
+                return res
+                    .status(403)
+                    .json({
+                        reason: 'One or more fields are invalid',
+                        fields: validation
+                    })
+            }
+        }
     });
 
 export { router };

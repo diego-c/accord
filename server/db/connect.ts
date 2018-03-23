@@ -1,6 +1,6 @@
-import { Client, QueryResult } from 'pg';
+import { Pool, QueryResult } from 'pg';
 
-const client: Client = new Client({
+const pool: Pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -8,11 +8,11 @@ const client: Client = new Client({
     port: typeof process.env.DB_PORT === 'number' ? process.env.DB_PORT : 6000
 });
 
-export const connect = async (query: string) => {
-    await client.connect();
+export const connect = async (query: string, vals: any[]) => {
+    await pool.connect();
     let res: QueryResult;
     try {
-        res = await client.query(query);
+        res = await pool.query(query, vals);
         return res;
     } catch (err) {
         throw new Error('Sorry, could not connect to the db server \n' + err);

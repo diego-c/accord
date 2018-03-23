@@ -9,12 +9,48 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 // import { connect } from '../db/connect';
-// import { User, Login } from '../db/schema';
+const SignUpValidation_1 = require("../utils/SignUpValidation");
+const HashPassword_1 = require("../utils/HashPassword");
+const connect_1 = require("../db/connect");
 const router = express.Router();
 exports.router = router;
 router
     .post('/signup', (req, res) => {
     const user = req.body;
-    console.log('New User: \n' + JSON.stringify(user, null, 2));
-    res.json(user);
+    const validation = SignUpValidation_1.validateSignUp(user);
+    if (typeof validation === 'boolean' && validation === false) {
+        return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' });
+    }
+    else {
+        const valid = Object.keys(validation).every((key) => validation[key]);
+        if (valid) {
+            const validInfo = Object.assign({}, user);
+            const hashed = HashPassword_1.hashPassword(validInfo.password);
+            const validUser = {
+                username: validInfo.username,
+                email: validInfo.email,
+                hash: hashed.hash,
+                salt: hashed.salt,
+                birthdate: validInfo.birthdate,
+                gender: validInfo.gender
+            };
+            const query = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6)';
+            // TODO: connection fails, throws 500
+            connect_1.connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
+                .then((result) => {
+                return res.status(200).json({ result });
+            })
+                .catch((error) => {
+                return res.status(500).json({ error });
+            });
+        }
+        else {
+            return res
+                .status(403)
+                .json({
+                reason: 'One or more fields are invalid',
+                fields: validation
+            });
+        }
+    }
 });
