@@ -15,8 +15,6 @@ require('dotenv').config({ path: path.resolve(process.cwd(), '../.env') });
 const express_1 = __importDefault(require("express"));
 const routes_1 = require("./routes/routes");
 const cors_1 = require("./middleware/cors");
-// import { validateUser } from './middleware/validation';
-// import { connect } from './db/connect';
 const app = express_1.default();
 const port = process.env.PORT || 3000;
 app.use('/api', cors_1.cors, express_1.default.json(), routes_1.router);

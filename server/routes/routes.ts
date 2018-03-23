@@ -1,7 +1,6 @@
 import * as express from 'express';
-// import { connect } from '../db/connect';
 import { Validation, validateSignUp } from '../utils/SignUpValidation';
-import { SignUp, User } from '../db/schema';
+import { SignUp, User, Gender } from '../db/schema';
 import { Hashed, hashPassword } from '../utils/HashPassword';
 import { connect } from '../db/connect';
 import { QueryResult } from 'pg';
@@ -20,6 +19,7 @@ router
 
             if (valid) {
                 const validInfo: SignUp = { ...user } as SignUp;
+
                 const hashed: Hashed = hashPassword(validInfo.password);
 
                 const validUser: User = {
@@ -28,17 +28,17 @@ router
                     hash: hashed.hash,
                     salt: hashed.salt,
                     birthdate: validInfo.birthdate,
-                    gender: validInfo.gender
+                    gender: Gender[validInfo.gender as any]
                 }
 
-                const query: string = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6)'
+                const query: string = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6);'
 
-                // TODO: connection fails, throws 500
                 connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
                     .then((result: QueryResult) => {
                         return res.status(200).json({ result });
                     })
                     .catch((error: Error) => {
+                        console.log('Got error: ' + error);
                         return res.status(500).json({ error });
                     })
 

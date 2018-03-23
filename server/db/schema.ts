@@ -7,7 +7,7 @@ export interface SignUp {
     email: string,
     username: string,
     password: string,
-    gender?: Gender,
+    gender?: Gender | string,
     birthdate: string
 }
 
@@ -23,5 +23,5 @@ export interface User {
     hash: string,
     salt: string,
     birthdate: string,
-    gender?: Gender
+    gender?: Gender | string
 }

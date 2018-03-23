@@ -8,8 +8,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-// import { connect } from '../db/connect';
 const SignUpValidation_1 = require("../utils/SignUpValidation");
+const schema_1 = require("../db/schema");
 const HashPassword_1 = require("../utils/HashPassword");
 const connect_1 = require("../db/connect");
 const router = express.Router();
@@ -32,15 +32,15 @@ router
                 hash: hashed.hash,
                 salt: hashed.salt,
                 birthdate: validInfo.birthdate,
-                gender: validInfo.gender
+                gender: schema_1.Gender[validInfo.gender]
             };
-            const query = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6)';
-            // TODO: connection fails, throws 500
+            const query = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6);';
             connect_1.connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
                 .then((result) => {
                 return res.status(200).json({ result });
             })
                 .catch((error) => {
+                console.log('Got error: ' + error);
                 return res.status(500).json({ error });
             });
         }
