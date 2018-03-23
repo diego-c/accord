@@ -18,12 +18,12 @@ function generateSalt(len: number): string {
 
 export function hashPassword(password: string): Hashed {
     let hashed: Hashed,
-        salt = generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 100),
+        salt = generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 50),
         hash: Buffer;
 
     try {
 
-        hash = crypto.pbkdf2Sync(password, salt, typeof process.env.ITERATIONS === 'number' ? process.env.ITERATIONS : 10000, typeof process.env.KEYLEN === 'number' ? process.env.KEYLEN : 1024, 'sha512');
+        hash = crypto.pbkdf2Sync(password, salt, typeof process.env.ITERATIONS === 'number' ? process.env.ITERATIONS : 10000, typeof process.env.KEYLEN === 'number' ? process.env.KEYLEN : 256, 'sha512');
 
         hashed = {
             hash: hash.toString('hex'),
