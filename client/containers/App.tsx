@@ -19,7 +19,7 @@ class App extends React.Component<AppProps, State> {
         return (
             <div className={classes.App}>
                 <NavLayout />
-                <MainLayout isSignedIn={false} />
+                <MainLayout />
             </div>
         )
     }

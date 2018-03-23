@@ -12,9 +12,9 @@ const SignUpValidation_1 = require("../utils/SignUpValidation");
 const schema_1 = require("../db/schema");
 const HashPassword_1 = require("../utils/HashPassword");
 const connect_1 = require("../db/connect");
-const router = express.Router();
-exports.router = router;
-router
+const signUpRouter = express.Router();
+exports.signUpRouter = signUpRouter;
+signUpRouter
     .post('/signup', (req, res) => {
     const user = req.body;
     const validation = SignUpValidation_1.validateSignUp(user);

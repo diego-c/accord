@@ -4,9 +4,9 @@ import { SignUp, User, Gender } from '../db/schema';
 import { Hashed, hashPassword } from '../utils/HashPassword';
 import { connect } from '../db/connect';
 import { QueryResult } from 'pg';
-const router: express.Router = express.Router();
+const signUpRouter: express.Router = express.Router();
 
-router
+signUpRouter
     .post('/signup', (req: express.Request, res: express.Response) => {
         const user: any = req.body;
 
@@ -53,4 +53,4 @@ router
         }
     });
 
-export { router };
+export { signUpRouter };

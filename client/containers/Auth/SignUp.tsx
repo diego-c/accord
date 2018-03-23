@@ -1,12 +1,6 @@
 import * as React from 'react';
-import { AxiosResponse } from 'axios';
-import { fetch } from '../../axios/connect';
 
-export interface signUpProps {
-    isSignedIn: boolean
-}
-
-const today: string =
+export const today: string =
     new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: '2-digit',
@@ -24,12 +18,23 @@ const today: string =
         }, [])
         .join('-')
 
-enum Gender {
+export enum Gender {
     Male = 'Male',
-    Female = 'Female'
+    Female = 'Female',
+    None = 'None'
 }
 
-interface signUpState {
+export interface signUpProps {
+    email: string,
+    username: string,
+    password: string,
+    gender?: Gender,
+    birthdate: string,
+    onInputChange: Function,
+    onSubmit: Function
+}
+
+export interface signUpState {
     email: string,
     username: string,
     password: string,
@@ -37,115 +42,74 @@ interface signUpState {
     birthdate: string
 }
 
-export class SignUp extends React.Component<signUpProps, signUpState> {
-
-    state = {
-        email: '',
-        username: '',
-        password: '',
-        gender: Gender.Male,
-        birthdate: today
-    }
-
-    onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        switch (e.target.name) {
-            case 'email':
-                this.setState({ email: e.target.value });
-                break;
-
-            case 'username':
-                this.setState({ username: e.target.value });
-                break;
-
-            case 'password':
-                this.setState({ password: e.target.value });
-                break;
-
-            case 'gender':
-                this.setState({ gender: e.target.value === 'Male' ? Gender.Male : Gender.Female });
-                break;
-
-            case 'birthdate':
-                console.log('Birthdate: ' + e.target.value);
-                this.setState({ birthdate: e.target.value });
-                break;
-
-            default:
-                return;
-        }
-    }
-
-    onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-
-        if (this.state.username && this.state.password) {
-            console.log('Signing up as: \n' + JSON.stringify(this.state));
-
-            fetch.post('/signup', this.state)
-                .then((res: AxiosResponse) => console.log('From the server: \n' + JSON.stringify(res.data, null, 2)))
-                .catch((err: Error) => console.log('Oops! \n' + err))
-        }
-    }
-
-    render() {
-        if (!this.props.isSignedIn) {
-            return (
-                <div>
-                    <h3>Sign Up</h3>
-                    <p>E-mail:
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            onChange={e => this.onInputChange(e)}
-                            value={this.state.email} />
+export const SignUp: React.SFC<signUpProps> = (props) => {
+    return (
+        <form action="#" method="POST">
+            <h3>Sign Up</h3>
+            <p>E-mail:
+                    <input
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    required
+                    onChange={e => props.onInputChange(e)}
+                    value={props.email} />
+            </p>
+            <p>Username:
+                    <input
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    required
+                    onChange={e => props.onInputChange(e)}
+                    value={props.username} />
+            </p>
+            <p>Password:
+                    <input
+                    type="password"
+                    name="password"
+                    required
+                    autoComplete="current-password"
+                    onChange={e => props.onInputChange(e)}
+                    value={props.password} />
+            </p>
+            <p>Gender:
+                    <input
+                    type="radio"
+                    name="gender"
+                    onChange={e => props.onInputChange(e)}
+                    value={Gender.Male}
+                />
+                Male
+                    <input
+                    type="radio"
+                    name="gender"
+                    onChange={e => props.onInputChange(e)}
+                    value={Gender.Female}
+                />
+                Female
+                    <input
+                    type="radio"
+                    name="gender"
+                    onChange={e => props.onInputChange(e)}
+                    value={Gender.None}
+                    defaultChecked
+                />
+                Prefer not to say
                     </p>
-                    <p>Username:
-                        <input
-                            type="text"
-                            name="username"
-                            required
-                            onChange={e => this.onInputChange(e)}
-                            value={this.state.username} />
-                    </p>
-                    <p>Password:
-                         <input
-                            type="password"
-                            name="password"
-                            required
-                            onChange={e => this.onInputChange(e)}
-                            value={this.state.password} />
-                    </p>
-                    <p>Gender:
-                         <input
-                            type="radio"
-                            name="gender"
-                            onChange={e => this.onInputChange(e)}
-                            value={Gender.Male}
-                            checked />
-                        Male
-                        <input
-                            type="radio"
-                            name="gender"
-                            onChange={e => this.onInputChange(e)}
-                            value={Gender.Female} />
-                        Female
-                    </p>
-                    <p>Birthdate:
-                         <input
-                            type="date"
-                            name="birthdate"
-                            required
-                            onChange={e => this.onInputChange(e)}
-                            value={this.state.birthdate} />
-                    </p>
-                    <button onClick={e => this.onSubmit(e)}>
-                        Sign Up
-                    </button>
-                </div>
-            )
-        } else {
-            return null;
-        }
-    }
+            <p>Birthdate:
+                    <input
+                    type="date"
+                    name="birthdate"
+                    required
+                    onChange={e => props.onInputChange(e)}
+                    value={props.birthdate} />
+            </p>
+            <button
+                type="submit"
+                onClick={e => props.onSubmit(e)}>
+                Sign Up
+            </button>
+        </form>
+    )
 }

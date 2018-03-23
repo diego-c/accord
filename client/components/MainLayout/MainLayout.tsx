@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { signUpProps, SignUp } from '../../containers/Auth/SignUp';
+import { Auth } from '../../containers/Auth/Auth';
 
-export const MainLayout: React.SFC<signUpProps> = props => {
+export const MainLayout: React.SFC = () => {
     return (
-        <SignUp isSignedIn={props.isSignedIn} />
+        <Auth />
     )
 }   
