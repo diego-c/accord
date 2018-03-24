@@ -15,7 +15,7 @@ const connect_1 = require("../db/connect");
 const signUpRouter = express.Router();
 exports.signUpRouter = signUpRouter;
 signUpRouter
-    .post('/signup', (req, res) => {
+    .post('/', (req, res) => {
     const user = req.body;
     const validation = SignUpValidation_1.validateSignUp(user);
     if (typeof validation === 'boolean' && validation === false) {

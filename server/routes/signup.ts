@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Validation, validateSignUp } from '../utils/SignUpValidation';
+import { SignUpValidation, validateSignUp } from '../utils/SignUpValidation';
 import { SignUp, User, Gender } from '../db/schema';
 import { Hashed, hashPassword } from '../utils/HashPassword';
 import { connect } from '../db/connect';
@@ -7,10 +7,10 @@ import { QueryResult } from 'pg';
 const signUpRouter: express.Router = express.Router();
 
 signUpRouter
-    .post('/signup', (req: express.Request, res: express.Response) => {
+    .post('/', (req: express.Request, res: express.Response) => {
         const user: any = req.body;
 
-        const validation: boolean | Validation = validateSignUp(user);
+        const validation: boolean | SignUpValidation = validateSignUp(user);
 
         if (typeof validation === 'boolean' && validation === false) {
             return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' })

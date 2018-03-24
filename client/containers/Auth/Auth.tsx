@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SignUp, signUpState, Gender, today } from './SignUp';
-import { Login, loginState } from './Login';
+import { SignUp, signUpState, Gender, today } from '../../components/Auth/SignUp';
+import { Login, loginState } from '../../components/Auth/Login';
 import { AxiosResponse } from 'axios';
 import { fetch } from '../../axios/connect';
 
@@ -101,6 +101,11 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
 
         } else if (curr === current.LOGIN) {
             console.log('Signing in as: \n' + JSON.stringify(this.state[curr]));
+            fetch.post('/login', this.state.login)
+                .then((res: AxiosResponse) => {
+                    console.log('From the server: \n' + JSON.stringify(res.data, null, 2))
+                })
+                .catch((err: Error) => console.log('Oops! \n' + err));
         }
         return;
     }

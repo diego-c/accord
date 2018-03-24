@@ -15,8 +15,7 @@ export class NavLayout extends React.Component {
 
                     <a href="#">Accord</a>
                 </NavItem>
-                <NavItem content="Login" />
-                <NavItem content="Sign Up" />
+                <NavItem content="About" />
             </NavItems >
         )
     }

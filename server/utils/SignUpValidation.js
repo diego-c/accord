@@ -27,7 +27,7 @@ function validateBirthdate(birthdate) {
     return Boolean(/\d{4}\-\d{2}\-\d{2}/.test(birthdate));
 }
 function validateEmail(email) {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+    return Boolean((/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) && (email.length <= 254));
 }
 function validateGender(gender) {
     if ((gender === schema_1.Gender.Male) || (gender === schema_1.Gender.Female) || (gender === schema_1.Gender.None)) {

@@ -1,6 +1,6 @@
 import { Gender } from '../db/schema';
 
-export interface Validation {
+export interface SignUpValidation {
     username: boolean,
     password: boolean,
     email: boolean,
@@ -8,7 +8,7 @@ export interface Validation {
     gender: boolean
 }
 
-export function validateSignUp(user: any): Validation | boolean {
+export function validateSignUp(user: any): SignUpValidation | boolean {
 
     if (validateUser(user)) {
         return {
@@ -39,7 +39,7 @@ function validateBirthdate(birthdate: string): boolean {
 }
 
 function validateEmail(email: string): boolean {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+    return Boolean((/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) && (email.length <= 254));
 }
 
 function validateGender(gender: string): boolean {
@@ -48,4 +48,3 @@ function validateGender(gender: string): boolean {
     }
     return false;
 }
-
