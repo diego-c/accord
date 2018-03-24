@@ -15,22 +15,24 @@ interface authState<S, L> {
     current: current
 }
 
+const initialState: authState<signUpState, loginState> = {
+    signUp: {
+        email: '',
+        username: '',
+        password: '',
+        gender: Gender.None,
+        birthdate: today
+    },
+    login: {
+        username: '',
+        password: ''
+    },
+    current: current.SIGN_UP
+}
+
 export class Auth extends React.Component<{}, authState<signUpState, loginState>> {
 
-    state = {
-        signUp: {
-            email: '',
-            username: '',
-            password: '',
-            gender: Gender.None,
-            birthdate: today
-        },
-        login: {
-            username: '',
-            password: ''
-        },
-        current: current.SIGN_UP
-    }
+    state = { ...initialState };
 
     onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const field: string = e.target.name;
@@ -95,7 +97,13 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
             console.log('Signing up as: \n' + JSON.stringify(this.state[curr]));
 
             fetch.post('/signup', this.state.signUp)
-                .then((res: AxiosResponse) => console.log('From the server: \n' + JSON.stringify(res.data, null, 2)))
+                .then((res: AxiosResponse) => {
+                    console.log('From the server: \n' + JSON.stringify(res.data, null, 2))
+                    this.setState(prevState => ({
+                        signUp: { ...initialState.signUp },
+                        current: prevState.current
+                    }))
+                })
                 .catch((err: Error) => console.log('Oops! \n' + err));
 
         } else if (curr === current.LOGIN) {
@@ -103,15 +111,25 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
             fetch.post('/login', this.state.login)
                 .then((res: AxiosResponse) => {
                     console.log('From the server: \n' + JSON.stringify(res.data, null, 2))
+                    this.setState(prevState => ({
+                        login: { ...initialState.login },
+                        current: prevState.current
+                    }))
                 })
                 .catch((err: Error) => console.log('Oops! \n' + err));
         }
         return;
     }
 
-    switchMode = () => {
+    switchToSignUp = () => {
         this.setState({
-            current: this.state.current === current.SIGN_UP ? current.LOGIN : current.SIGN_UP
+            current: current.SIGN_UP
+        });
+    };
+
+    switchToLogin = () => {
+        this.setState({
+            current: current.LOGIN
         })
     }
 
@@ -125,9 +143,9 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
         return (
             <div>
                 <button
-                    onClick={this.switchMode}> Sign Up</button>
+                    onClick={this.switchToSignUp}>Sign Up</button>
                 <button
-                    onClick={this.switchMode}>Login</button>
+                    onClick={this.switchToLogin}>Login</button>
                 {loginOrSignUp}
             </div>
         )
