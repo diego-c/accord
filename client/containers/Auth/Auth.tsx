@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { SignUp, signUpState, Gender, today } from '../../components/Auth/SignUp';
 import { Login, loginState } from '../../components/Auth/Login';
+import { validateLogin, LoginValidation } from '../../utils/LoginValidation';
 import { AxiosResponse } from 'axios';
 import { fetch } from '../../axios/connect';
 
@@ -107,6 +108,19 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
                 .catch((err: Error) => console.log('Oops! \n' + err));
 
         } else if (curr === current.LOGIN) {
+            const validation: LoginValidation | boolean = validateLogin(this.state.login);
+            if (typeof validation === 'boolean' && validation === false) {
+                console.log('Please fill all fields');
+                return;
+            }
+            if (!((validation as LoginValidation).username)) {
+                console.log('Username should not be empty and should have no more than 20 characters');
+                return;
+            }
+            if (!((validation as LoginValidation).password)) {
+                console.log('Password should not be empty and should have between 6 and 100 characters');
+                return;
+            }
             console.log('Signing in as: \n' + JSON.stringify(this.state[curr]));
             fetch.post('/login', this.state.login)
                 .then((res: AxiosResponse) => {
