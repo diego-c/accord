@@ -4,6 +4,7 @@ import { Login, loginState } from '../../components/Auth/Login';
 import { validateLogin, LoginValidation } from '../../utils/LoginValidation';
 import { AxiosResponse } from 'axios';
 import { fetch } from '../../axios/connect';
+import { CustomError } from '../../errors/CustomError';
 
 enum current {
     SIGN_UP = 'signUp',
@@ -130,7 +131,7 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
                         current: prevState.current
                     }))
                 })
-                .catch((err: Error) => console.log('Oops! \n' + JSON.stringify(err)));
+                .catch((err: CustomError) => console.log('Oops! \n' + JSON.stringify(err.response.data, null, 2)));
         }
         return;
     }

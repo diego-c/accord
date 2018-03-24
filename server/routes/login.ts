@@ -1,11 +1,9 @@
 import * as express from 'express';
 import { Router } from 'express';
 import { LoginValidation, validateLogin } from '../utils/BasicLoginValidation';
-// import { connect } from '../db/connect';
-import { Login } from '../db/schema';
-// import { QueryResult } from 'pg';
-// import { hashPassword, Hashed } from '../utils/HashPassword';
+import { Login, User } from '../db/schema';
 import { checkUser } from '../utils/LoginValidation';
+import { ValidationError } from '../errors/ValidationError';
 const loginRouter: Router = express.Router();
 
 loginRouter
@@ -19,22 +17,22 @@ loginRouter
         } else {
             if ((loginValidation as LoginValidation).username && (loginValidation as LoginValidation).password) {
                 const validUser: Login = user;
-                checkUser(validUser);
-                /* const query: string = 'SELECT * FROM users WHERE username= $1;';
-                connect(query, [validUser.username])
-                    .then((result: QueryResult) => {
-                        if (result.rowCount) {
-                            console.log('Found user by username! \n' + JSON.stringify(result));
-                            return res.status(200).json({ result });
+
+                checkUser(validUser)
+                    .then(checked => {
+                        if (!(checked instanceof Error)) {
+                            return res.status(200).json({ message: 'Login approved!' });
+                        } else {
+                            if (checked instanceof ValidationError) {
+                                return res.status(403).json({ reason: checked });
+                            } else {
+                                return res.status(404).json({ reason: checked });
+                            }
                         }
-                        return res.status(404).json({ reason: 'User not found' });
                     })
-                    .catch((error: Error) => {
-                        console.log('OOps! \n' + JSON.stringify(error));
-                        return res.status(403).json({ error })
-                    }) */
+
             } else {
-                return res.status(403).json({ reason: 'Invalid combination' });
+                return res.status(403).json({ reason: 'Invalid username / password combination' })
             }
         }
     })

@@ -9,9 +9,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 const BasicLoginValidation_1 = require("../utils/BasicLoginValidation");
-// import { QueryResult } from 'pg';
-// import { hashPassword, Hashed } from '../utils/HashPassword';
 const LoginValidation_1 = require("../utils/LoginValidation");
+const ValidationError_1 = require("../errors/ValidationError");
 const loginRouter = express.Router();
 exports.loginRouter = loginRouter;
 loginRouter
@@ -24,23 +23,23 @@ loginRouter
     else {
         if (loginValidation.username && loginValidation.password) {
             const validUser = user;
-            LoginValidation_1.checkUser(validUser);
-            /* const query: string = 'SELECT * FROM users WHERE username= $1;';
-            connect(query, [validUser.username])
-                .then((result: QueryResult) => {
-                    if (result.rowCount) {
-                        console.log('Found user by username! \n' + JSON.stringify(result));
-                        return res.status(200).json({ result });
+            LoginValidation_1.checkUser(validUser)
+                .then(checked => {
+                if (!(checked instanceof Error)) {
+                    return res.status(200).json({ message: 'Login approved!' });
+                }
+                else {
+                    if (checked instanceof ValidationError_1.ValidationError) {
+                        return res.status(403).json({ reason: checked });
                     }
-                    return res.status(404).json({ reason: 'User not found' });
-                })
-                .catch((error: Error) => {
-                    console.log('OOps! \n' + JSON.stringify(error));
-                    return res.status(403).json({ error })
-                }) */
+                    else {
+                        return res.status(404).json({ reason: checked });
+                    }
+                }
+            });
         }
         else {
-            return res.status(403).json({ reason: 'Invalid combination' });
+            return res.status(403).json({ reason: 'Invalid username / password combination' });
         }
     }
 });
