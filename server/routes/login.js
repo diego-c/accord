@@ -20,23 +20,7 @@ loginRouter
         return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' });
     }
     else {
-        if (loginValidation.email && loginValidation.password) {
-            const validUser = user;
-            const query = 'SELECT * FROM users WHERE email= $1;';
-            connect_1.connect(query, [validUser.email])
-                .then((result) => {
-                if (result.rowCount) {
-                    console.log('Found user by email! \n' + JSON.stringify(result.fields));
-                    return res.status(200).json({ result });
-                }
-                return res.status(404).json({ reason: 'User not found' });
-            })
-                .catch((error) => {
-                console.log('OOps! \n' + JSON.stringify(error));
-                return res.status(403).json({ error });
-            });
-        }
-        else if (loginValidation.username && loginValidation.password) {
+        if (loginValidation.username && loginValidation.password) {
             const validUser = user;
             const query = 'SELECT * FROM users WHERE username= $1;';
             connect_1.connect(query, [validUser.username])

@@ -27,7 +27,6 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
         },
         login: {
             username: '',
-            email: '',
             password: ''
         },
         current: current.SIGN_UP

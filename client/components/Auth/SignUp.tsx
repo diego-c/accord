@@ -5,7 +5,8 @@ export const today: string =
         year: 'numeric',
         month: '2-digit',
         day: '2-digit'
-    }).split('/')
+    })
+        .split('/')
         .reduce((acc: string[], field: string, index: number) => {
             if (/\d{4}/.test(field)) {
                 acc.splice(0, 0, field);

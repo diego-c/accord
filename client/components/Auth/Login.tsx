@@ -1,14 +1,12 @@
 import * as React from 'react';
 
 export interface loginState {
-    username?: string,
-    email?: string,
+    username: string,
     password: string
 }
 
 export interface loginProps {
-    username?: string,
-    email?: string,
+    username: string,
     password: string,
     onInputChange: Function,
     onSubmit: Function
@@ -18,19 +16,12 @@ export const Login: React.SFC<loginProps> = (props) => {
     return (
         <form action="#" method="POST">
             <h3>Login</h3>
-            <p>E-mail:
-                    <input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    onChange={e => props.onInputChange(e)}
-                    value={props.email} />
-            </p>
             <p>Username:
                     <input
                     type="text"
                     autoComplete="username"
                     name="username"
+                    required
                     onChange={e => props.onInputChange(e)}
                     value={props.username} />
             </p>
