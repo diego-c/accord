@@ -1,8 +1,11 @@
+import { Gender } from '../db/schema';
+
 export interface Validation {
     username: boolean,
     password: boolean,
     email: boolean,
-    birthdate: boolean
+    birthdate: boolean,
+    gender: boolean
 }
 
 export function validateSignUp(user: any): Validation | boolean {
@@ -12,7 +15,8 @@ export function validateSignUp(user: any): Validation | boolean {
             username: validateUsername(user.username),
             password: validatePassword(user.password),
             email: validateEmail(user.email),
-            birthdate: validateBirthdate(user.birthdate)
+            birthdate: validateBirthdate(user.birthdate),
+            gender: validateGender(user.gender)
         }
     }
     return false;
@@ -36,5 +40,12 @@ function validateBirthdate(birthdate: string): boolean {
 
 function validateEmail(email: string): boolean {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+}
+
+function validateGender(gender: string): boolean {
+    if ((gender === Gender.Male) || (gender === Gender.Female) || (gender === Gender.None)) {
+        return true;
+    }
+    return false;
 }
 

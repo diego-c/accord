@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Gender;
 (function (Gender) {
-    Gender["Male"] = "M";
-    Gender["Female"] = "F";
+    Gender["Male"] = "Male";
+    Gender["Female"] = "Female";
+    Gender["None"] = "None";
 })(Gender = exports.Gender || (exports.Gender = {}));
 ;

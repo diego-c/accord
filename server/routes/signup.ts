@@ -18,7 +18,26 @@ signUpRouter
             const valid: boolean = Object.keys(validation).every((key: string) => (validation as any)[key])
 
             if (valid) {
-                const validInfo: SignUp = { ...user } as SignUp;
+                const validInfo: SignUp =
+                    (Object
+                        .keys(user)
+                        .reduce((acc: any, field: string) => {
+                            if (field === 'gender') {
+                                switch (user[field]) {
+                                    case Gender.Female:
+                                        acc[field] = 'F';
+                                        return acc;
+                                    case Gender.Male:
+                                        acc[field] = 'M';
+                                        return acc;
+                                    default:
+                                        acc[field] = null;
+                                        return acc;
+                                }
+                            }
+                            acc[field] = user[field];
+                            return acc;
+                        }, {})) as SignUp
 
                 const hashed: Hashed = hashPassword(validInfo.password);
 
@@ -28,7 +47,7 @@ signUpRouter
                     hash: hashed.hash,
                     salt: hashed.salt,
                     birthdate: validInfo.birthdate,
-                    gender: Gender[validInfo.gender as any]
+                    gender: validInfo.gender
                 }
 
                 const query: string = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6);'

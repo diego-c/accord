@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { SignUp, signUpState, Gender, today } from './SignUp';
 import { Login, loginState } from './Login';
-/* import { AxiosResponse } from 'axios';
-import { fetch } from '../../axios/connect'; */
+import { AxiosResponse } from 'axios';
+import { fetch } from '../../axios/connect';
 
 enum current {
     SIGN_UP = 'signUp',
@@ -94,15 +94,15 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
         const curr = this.state.current;
         if (curr === current.SIGN_UP) {
             console.log('Signing up as: \n' + JSON.stringify(this.state[curr]));
+
+            fetch.post('/signup', this.state.signUp)
+                .then((res: AxiosResponse) => console.log('From the server: \n' + JSON.stringify(res.data, null, 2)))
+                .catch((err: Error) => console.log('Oops! \n' + err));
+
         } else if (curr === current.LOGIN) {
             console.log('Signing in as: \n' + JSON.stringify(this.state[curr]));
         }
         return;
-
-        /* fetch.post('/signup', this.state.signUp)
-            .then((res: AxiosResponse) => console.log('From the server: \n' + JSON.stringify(res.data, null, 2)))
-            .catch((err: Error) => console.log('Oops! \n' + err)) */
-
     }
 
     switchMode = () => {

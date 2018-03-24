@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const schema_1 = require("../db/schema");
 function validateSignUp(user) {
     if (validateUser(user)) {
         return {
             username: validateUsername(user.username),
             password: validatePassword(user.password),
             email: validateEmail(user.email),
-            birthdate: validateBirthdate(user.birthdate)
+            birthdate: validateBirthdate(user.birthdate),
+            gender: validateGender(user.gender)
         };
     }
     return false;
@@ -26,4 +28,10 @@ function validateBirthdate(birthdate) {
 }
 function validateEmail(email) {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+}
+function validateGender(gender) {
+    if ((gender === schema_1.Gender.Male) || (gender === schema_1.Gender.Female) || (gender === schema_1.Gender.None)) {
+        return true;
+    }
+    return false;
 }

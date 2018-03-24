@@ -1,13 +1,14 @@
 export enum Gender {
-    Male = 'M',
-    Female = 'F'
+    Male = 'Male',
+    Female = 'Female',
+    None = 'None'
 };
 
 export interface SignUp {
     email: string,
     username: string,
     password: string,
-    gender?: Gender | string,
+    gender: 'M' | 'F' | null,
     birthdate: string
 }
 
@@ -23,5 +24,5 @@ export interface User {
     hash: string,
     salt: string,
     birthdate: string,
-    gender?: Gender | string
+    gender: 'M' | 'F' | null
 }

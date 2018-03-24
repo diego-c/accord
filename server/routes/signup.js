@@ -24,7 +24,25 @@ signUpRouter
     else {
         const valid = Object.keys(validation).every((key) => validation[key]);
         if (valid) {
-            const validInfo = Object.assign({}, user);
+            const validInfo = (Object
+                .keys(user)
+                .reduce((acc, field) => {
+                if (field === 'gender') {
+                    switch (user[field]) {
+                        case schema_1.Gender.Female:
+                            acc[field] = 'F';
+                            return acc;
+                        case schema_1.Gender.Male:
+                            acc[field] = 'M';
+                            return acc;
+                        default:
+                            acc[field] = null;
+                            return acc;
+                    }
+                }
+                acc[field] = user[field];
+                return acc;
+            }, {}));
             const hashed = HashPassword_1.hashPassword(validInfo.password);
             const validUser = {
                 username: validInfo.username,
@@ -32,7 +50,7 @@ signUpRouter
                 hash: hashed.hash,
                 salt: hashed.salt,
                 birthdate: validInfo.birthdate,
-                gender: schema_1.Gender[validInfo.gender]
+                gender: validInfo.gender
             };
             const query = 'INSERT INTO users(email, username, hash, salt, gender, birthdate) VALUES($1, $2, $3, $4, $5, $6);';
             connect_1.connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
