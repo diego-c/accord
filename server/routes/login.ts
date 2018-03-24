@@ -1,9 +1,10 @@
 import * as express from 'express';
 import { Router } from 'express';
 import { LoginValidation, validateLogin } from '../utils/BasicLoginValidation';
-import { Login, User } from '../db/schema';
+import { Login } from '../db/schema';
 import { checkUser } from '../utils/LoginValidation';
 import { ValidationError } from '../errors/ValidationError';
+import { UserNotFoundError } from '../errors/UserNotFoundError';
 const loginRouter: Router = express.Router();
 
 loginRouter
@@ -25,10 +26,15 @@ loginRouter
                         } else {
                             if (checked instanceof ValidationError) {
                                 return res.status(403).json({ reason: checked });
-                            } else {
+                            } else if (checked instanceof UserNotFoundError) {
                                 return res.status(404).json({ reason: checked });
+                            } else {
+                                return res.status(500).json({ reason: checked });
                             }
                         }
+                    })
+                    .catch(err => {
+                        return res.status(500).json({ reason: err });
                     })
 
             } else {

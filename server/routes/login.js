@@ -11,6 +11,7 @@ const express = __importStar(require("express"));
 const BasicLoginValidation_1 = require("../utils/BasicLoginValidation");
 const LoginValidation_1 = require("../utils/LoginValidation");
 const ValidationError_1 = require("../errors/ValidationError");
+const UserNotFoundError_1 = require("../errors/UserNotFoundError");
 const loginRouter = express.Router();
 exports.loginRouter = loginRouter;
 loginRouter
@@ -32,10 +33,16 @@ loginRouter
                     if (checked instanceof ValidationError_1.ValidationError) {
                         return res.status(403).json({ reason: checked });
                     }
-                    else {
+                    else if (checked instanceof UserNotFoundError_1.UserNotFoundError) {
                         return res.status(404).json({ reason: checked });
                     }
+                    else {
+                        return res.status(500).json({ reason: checked });
+                    }
                 }
+            })
+                .catch(err => {
+                return res.status(500).json({ reason: err });
             });
         }
         else {
