@@ -14,8 +14,8 @@ function generateSalt(len) {
         throw new Error('Error while attempting to generate salt: \n' + err);
     }
 }
-function hashPassword(password) {
-    let hashed, salt = generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 50), hash;
+function hashPassword(password, optionalSalt) {
+    let hashed, salt = optionalSalt || generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 50), hash;
     try {
         hash = crypto_1.default.pbkdf2Sync(password, salt, typeof process.env.ITERATIONS === 'number' ? process.env.ITERATIONS : 10000, typeof process.env.KEYLEN === 'number' ? process.env.KEYLEN : 256, 'sha512');
         hashed = {

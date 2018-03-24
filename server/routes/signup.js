@@ -8,7 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-const SignUpValidation_1 = require("../utils/SignUpValidation");
+const BasicSignUpValidation_1 = require("../utils/BasicSignUpValidation");
 const schema_1 = require("../db/schema");
 const HashPassword_1 = require("../utils/HashPassword");
 const connect_1 = require("../db/connect");
@@ -17,7 +17,7 @@ exports.signUpRouter = signUpRouter;
 signUpRouter
     .post('/', (req, res) => {
     const user = req.body;
-    const validation = SignUpValidation_1.validateSignUp(user);
+    const validation = BasicSignUpValidation_1.validateSignUp(user);
     if (typeof validation === 'boolean' && validation === false) {
         return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' });
     }

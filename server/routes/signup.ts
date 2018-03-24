@@ -1,6 +1,6 @@
 import * as express from 'express';
-import { SignUpValidation, validateSignUp } from '../utils/SignUpValidation';
-import { SignUp, User, Gender } from '../db/schema';
+import { SignUpValidation, validateSignUp } from '../utils/BasicSignUpValidation';
+import { SignUp, Gender, BasicUser } from '../db/schema';
 import { Hashed, hashPassword } from '../utils/HashPassword';
 import { connect } from '../db/connect';
 import { QueryResult } from 'pg';
@@ -41,7 +41,7 @@ signUpRouter
 
                 const hashed: Hashed = hashPassword(validInfo.password);
 
-                const validUser: User = {
+                const validUser: BasicUser = {
                     username: validInfo.username,
                     email: validInfo.email,
                     hash: hashed.hash,

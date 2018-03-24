@@ -130,7 +130,7 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
                         current: prevState.current
                     }))
                 })
-                .catch((err: Error) => console.log('Oops! \n' + err));
+                .catch((err: Error) => console.log('Oops! \n' + JSON.stringify(err)));
         }
         return;
     }

@@ -7,3 +7,11 @@ var Gender;
     Gender["None"] = "None";
 })(Gender = exports.Gender || (exports.Gender = {}));
 ;
+var GlobalRole;
+(function (GlobalRole) {
+    GlobalRole["NOOB"] = "NOOB";
+    GlobalRole["USER"] = "USER";
+    GlobalRole["MODERATOR"] = "MODERATOR";
+    GlobalRole["HOST"] = "HOST";
+    GlobalRole["ADMIN"] = "ADMIN";
+})(GlobalRole = exports.GlobalRole || (exports.GlobalRole = {}));

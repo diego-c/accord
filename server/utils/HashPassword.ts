@@ -16,9 +16,9 @@ function generateSalt(len: number): string {
     }
 }
 
-export function hashPassword(password: string): Hashed {
+export function hashPassword(password: string, optionalSalt?: string): Hashed {
     let hashed: Hashed,
-        salt = generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 50),
+        salt: string = optionalSalt || generateSalt(typeof process.env.SALTLEN === 'number' ? process.env.SALTLEN : 50),
         hash: Buffer;
 
     try {
