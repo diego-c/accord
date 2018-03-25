@@ -5,6 +5,7 @@ import { validateLogin, LoginValidation } from '../../utils/LoginValidation';
 import { AxiosResponse } from 'axios';
 import { fetch } from '../../axios/connect';
 import { CustomError } from '../../errors/CustomError';
+import { SignUpValidation, validateSignUp } from '../../utils/SignUpValidation';
 
 enum current {
     SIGN_UP = 'signUp',
@@ -96,6 +97,33 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
 
         const curr = this.state.current;
         if (curr === current.SIGN_UP) {
+            const validation: SignUpValidation | boolean = validateSignUp(this.state.signUp);
+
+            if (typeof validation === 'boolean' && validation === false) {
+                console.log('Please fill all fields');
+                return;
+            }
+            if (!((validation as SignUpValidation).username)) {
+                console.log('Username should not be empty and should have no more than 20 characters');
+                return;
+            }
+            if (!((validation as SignUpValidation).password)) {
+                console.log('Password should not be empty and should have between 6 and 100 characters');
+                return;
+            }
+            if (!((validation as SignUpValidation).email)) {
+                console.log('Invalid email');
+                return;
+            }
+            if (!((validation as SignUpValidation).birthdate)) {
+                console.log('Invalid birthdate');
+                return;
+            }
+            if (!((validation as SignUpValidation).gender)) {
+                console.log('Invalid gender');
+                return;
+            }
+
             console.log('Signing up as: \n' + JSON.stringify(this.state[curr]));
 
             fetch.post('/signup', this.state.signUp)
