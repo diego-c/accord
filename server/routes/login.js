@@ -31,22 +31,22 @@ loginRouter
                 }
                 else {
                     if (checked instanceof ValidationError_1.ValidationError) {
-                        return res.status(403).json({ reason: checked, message: 'Invalid password' });
+                        return res.status(403).json({ reason: checked.name, message: 'Invalid password' });
                     }
                     else if (checked instanceof UserNotFoundError_1.UserNotFoundError) {
-                        return res.status(404).json({ reason: checked, message: 'No user with the specified username was found' });
+                        return res.status(404).json({ reason: checked.name, message: 'No user with the specified username was found' });
                     }
                     else {
-                        return res.status(500).json({ reason: checked, message: checked.message });
+                        return res.status(500).json({ reason: checked.name, message: checked.message });
                     }
                 }
             })
-                .catch(err => {
-                return res.status(500).json({ reason: err, message: err.message });
+                .catch((err) => {
+                return res.status(500).json({ reason: err.name, message: err.message });
             });
         }
         else {
-            return res.status(403).json({ reason: 'Invalid username / password combination' });
+            return res.status(403).json({ reason: 'ValidationError', message: 'Invalid username / password combination' });
         }
     }
 });

@@ -15,7 +15,7 @@ function validateSignUp(user) {
 }
 exports.validateSignUp = validateSignUp;
 function validateUser(user) {
-    return Boolean(user.username && user.password && user.email && user.birthdate);
+    return Boolean(user.username && user.password && user.email && user.birthdate && user.gender);
 }
 function validateUsername(username) {
     return Boolean(username.trim() && (username.length <= 20));

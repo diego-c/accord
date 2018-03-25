@@ -23,7 +23,7 @@ export function validateSignUp(user: any): SignUpValidation | boolean {
 }
 
 function validateUser(user: any): boolean {
-    return Boolean(user.username && user.password && user.email && user.birthdate);
+    return Boolean(user.username && user.password && user.email && user.birthdate && user.gender);
 }
 
 function validateUsername(username: string): boolean {

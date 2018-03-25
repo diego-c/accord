@@ -106,7 +106,7 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
                         current: prevState.current
                     }))
                 })
-                .catch((err: Error) => console.log('Oops! \n' + err));
+                .catch((err: CustomError) => console.log('Oops! \n' + JSON.stringify(err.response.data, null, 2)));
 
         } else if (curr === current.LOGIN) {
             const validation: LoginValidation | boolean = validateLogin(this.state.login);
