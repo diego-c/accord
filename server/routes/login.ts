@@ -25,16 +25,16 @@ loginRouter
                             return res.status(200).json({ message: 'Login approved!' });
                         } else {
                             if (checked instanceof ValidationError) {
-                                return res.status(403).json({ reason: checked });
+                                return res.status(403).json({ reason: checked, message: 'Invalid password' });
                             } else if (checked instanceof UserNotFoundError) {
-                                return res.status(404).json({ reason: checked });
+                                return res.status(404).json({ reason: checked, message: 'No user with the specified username was found' });
                             } else {
-                                return res.status(500).json({ reason: checked });
+                                return res.status(500).json({ reason: checked, message: checked.message });
                             }
                         }
                     })
                     .catch(err => {
-                        return res.status(500).json({ reason: err });
+                        return res.status(500).json({ reason: err, message: err.message });
                     })
 
             } else {

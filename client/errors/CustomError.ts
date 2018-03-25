@@ -1,6 +1,7 @@
 type CustomErrorData = {
     data: {
-        reason: string
+        reason: string,
+        message: string
     }
 }
 
