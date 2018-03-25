@@ -1,4 +1,5 @@
 import * as React from 'react';
+import '../../scss/globals/grid/grid.scss';
 
 export const today: string =
     new Date().toLocaleDateString('en-US', {
@@ -45,7 +46,7 @@ export interface signUpState {
 
 export const SignUp: React.SFC<signUpProps> = (props) => {
     return (
-        <form action="#" method="POST">
+        <form action="#" method="POST" className="cols-5">
             <h3>Sign Up</h3>
             <p>E-mail:
                     <input

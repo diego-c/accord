@@ -1,3 +1,6 @@
+@import "./vars/fonts";
+@import "./vars/colors";
+
 *,
 *::before,
 *::after {
@@ -6,10 +9,12 @@
     font-family: inherit;
     font-size: inherit;
     box-sizing: inherit;
+    color: inherit;
 }
 
 html {
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: $font-normal;
+    color: $color-text-normal;
     font-size: 62.5%;
 }
 
