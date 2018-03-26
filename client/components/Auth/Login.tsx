@@ -1,5 +1,7 @@
 import * as React from 'react';
 import classes from '../../scss/components/Login/Login.scss';
+import { SubmitButton } from '../Buttons/Submit/SubmitButton';
+import { ButtonTypes } from '../../utils/ButtonTypes';
 
 export interface loginState {
     username: string,
@@ -10,7 +12,7 @@ export interface loginProps {
     username: string,
     password: string,
     onInputChange: Function,
-    onSubmit: Function
+    onSubmit: ((e: React.MouseEvent<HTMLButtonElement>) => void)
 }
 
 export const Login: React.SFC<loginProps> = (props) => {
@@ -34,11 +36,12 @@ export const Login: React.SFC<loginProps> = (props) => {
                     onChange={e => props.onInputChange(e)}
                     value={props.password} />
             </p>
-            <button
-                type="submit"
-                onClick={e => props.onSubmit(e)}>
+
+            <SubmitButton
+                type={ButtonTypes.SUCCESS}
+                onSubmit={props.onSubmit}>
                 Login
-            </button>
+            </SubmitButton>
         </form>
     )
 }

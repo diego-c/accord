@@ -1,5 +1,7 @@
 import * as React from 'react';
 import classes from '../../scss/components/SignUp/SignUp.scss';
+import { SubmitButton } from '../Buttons/Submit/SubmitButton';
+import { ButtonTypes } from '../../utils/ButtonTypes';
 
 export const today: string =
     new Date().toLocaleDateString('en-US', {
@@ -33,7 +35,7 @@ export interface signUpProps {
     gender?: Gender,
     birthdate: string,
     onInputChange: Function,
-    onSubmit: Function
+    onSubmit: ((e: React.MouseEvent<HTMLButtonElement>) => void)
 }
 
 export interface signUpState {
@@ -106,11 +108,11 @@ export const SignUp: React.SFC<signUpProps> = (props) => {
                     onChange={e => props.onInputChange(e)}
                     value={props.birthdate} />
             </p>
-            <button
-                type="submit"
-                onClick={e => props.onSubmit(e)}>
+            <SubmitButton
+                type={ButtonTypes.INFO}
+                onSubmit={props.onSubmit}>
                 Sign Up
-            </button>
+            </SubmitButton>
         </form>
     )
 }

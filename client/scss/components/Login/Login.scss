@@ -1,8 +1,17 @@
 .Login {
-    p {
-        font-size: 1.8rem;
+    p:first-child {
         margin: 2rem auto;
     }
+
+    p:not(:first-child) {
+        margin: 4rem auto;
+    }
+
+    p {
+        font-size: 1.8rem;
+        letter-spacing: .05rem;
+    }
+
     input {
         margin-left: 1rem;
     }
