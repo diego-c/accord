@@ -4,6 +4,7 @@
     display: inline-block;
     cursor: pointer;
     margin-right: 2rem;
+    margin-bottom: 3rem;
     padding: .5rem;    
     position: relative;
 
@@ -28,7 +29,7 @@
         left: 0;
         width: 0;
         height: .3rem;
-        background-color: $color-vibrant-green;
+        background-color: $color-dark-blue;
         animation: active .3s forwards;
     }
 
@@ -50,7 +51,7 @@
         left: 0;
         width: 0;
         height: .3rem;
-        background-color: $color-vibrant-blue;
+        background-color: $color-dark-green;
         animation: active .3s forwards;
     }
 
