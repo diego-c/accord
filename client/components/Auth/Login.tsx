@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classes from '../../scss/components/Login/Login.scss';
 
 export interface loginState {
     username: string,
@@ -14,8 +15,7 @@ export interface loginProps {
 
 export const Login: React.SFC<loginProps> = (props) => {
     return (
-        <form action="#" method="POST">
-            <h3>Login</h3>
+        <form action="#" method="POST" className={classes.Login}>
             <p>Username:
                     <input
                     type="text"

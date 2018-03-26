@@ -1,9 +1,65 @@
+@import "../../globals/vars/colors";
+
 .Selector {
     display: inline-block;
     cursor: pointer;
-    margin-right: 1rem;
+    margin-right: 2rem;
+    padding: .5rem;    
+    position: relative;
 
     span {
-        font-size: 1.4rem;
+        font-size: 2.2rem;
+    }
+}
+
+.SelectorLeft {
+    margin-right: 2rem;
+}
+
+.SelectorRight {
+    margin-left: 2rem;
+}
+
+.Active1 {
+    ::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 0;
+        height: .3rem;
+        background-color: $color-vibrant-green;
+        animation: active .3s forwards;
+    }
+
+    @keyframes active {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+}
+
+.Active2 {
+    ::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 0;
+        height: .3rem;
+        background-color: $color-vibrant-blue;
+        animation: active .3s forwards;
+    }
+
+    @keyframes active {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
     }
 }

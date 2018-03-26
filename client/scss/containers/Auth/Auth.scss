@@ -1,4 +1,7 @@
+@import "../../globals/vars/colors";
+
 .Auth {
-    max-width: 600px;
+    max-width: 60rem;
     margin: 0 auto;
+    background-color: $color-dark-green;
 }

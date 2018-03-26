@@ -189,12 +189,13 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
             <div className={classes.Auth}>
                 <Selector
                     switch={this.switchToSignUp}
-                    activeBorderColor='#c2234f'>
+                    active={this.state.current === current.SIGN_UP}>
                     Sign Up
                 </Selector>
 
                 <Selector
-                    switch={this.switchToLogin}>
+                    switch={this.switchToLogin}
+                    active={this.state.current === current.LOGIN}>
                     Login
                 </Selector>
                 {loginOrSignUp}

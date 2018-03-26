@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classes from '../../scss/components/SignUp/SignUp.scss';
 
 export const today: string =
     new Date().toLocaleDateString('en-US', {
@@ -45,8 +46,7 @@ export interface signUpState {
 
 export const SignUp: React.SFC<signUpProps> = (props) => {
     return (
-        <form action="#" method="POST">
-            <h3>Sign Up</h3>
+        <form action="#" method="POST" className={classes.SignUp}>
             <p>E-mail:
                     <input
                     type="email"
