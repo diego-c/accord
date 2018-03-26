@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavItems } from './NavItems';
 import { NavItem } from '../../components/NavItem/NavItem';
-import accordLogo from '../../img/accord-logo.svg';
+import accordLogo from '../../assets/img/accord-logo.svg';
 
 export class NavLayout extends React.Component {
     render() {

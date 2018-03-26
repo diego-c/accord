@@ -6,7 +6,8 @@ import { AxiosResponse } from 'axios';
 import { fetch } from '../../axios/connect';
 import { CustomError } from '../../errors/CustomError';
 import { SignUpValidation, validateSignUp } from '../../utils/SignUpValidation';
-import classes from '../../scss/globals/grid/grid.scss';
+import { Selector } from '../../components/Selector/Selector';
+import classes from '../../scss/containers/Auth/Auth.scss';
 
 enum current {
     SIGN_UP = 'signUp',
@@ -185,11 +186,17 @@ export class Auth extends React.Component<{}, authState<signUpState, loginState>
             loginOrSignUp = <Login onInputChange={this.onInputChange} onSubmit={this.onSubmit} {...this.state.login} />
         }
         return (
-            <div className={classes.container}>
-                <button
-                    onClick={this.switchToSignUp}>Sign Up</button>
-                <button
-                    onClick={this.switchToLogin}>Login</button>
+            <div className={classes.Auth}>
+                <Selector
+                    switch={this.switchToSignUp}
+                    activeBorderColor='#c2234f'>
+                    Sign Up
+                </Selector>
+
+                <Selector
+                    switch={this.switchToLogin}>
+                    Login
+                </Selector>
                 {loginOrSignUp}
             </div>
         )
