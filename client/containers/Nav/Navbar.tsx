@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Tabs, Tab, Typography, AppBar } from 'material-ui';
+import { SignUp } from '../Auth/SignUp';
 import classes from '../../scss/containers/Nav/Navbar.scss';
 
 const TabContainer: React.SFC = props => (
@@ -38,17 +39,13 @@ export class Navbar extends React.Component {
                         <Tab
                             className={classes.AboutTab}
                             label="About"
-                        /* style={{
-                            position: 'absolute',
-                            left: '80%'
-                        }} */
                         />
                     </Tabs>
                 </AppBar>
                 {
                     this.state.value === 0 &&
                     <TabContainer>
-                        Sign up!!
+                        <SignUp />
                     </TabContainer>
                 }
                 {
