@@ -49,6 +49,7 @@ type GenderField = {
 }
 
 interface SignUpState {
+    canSubmit: boolean,
     loading: boolean,
     formFields: {
         email: Field,
@@ -66,6 +67,7 @@ interface SignUpState {
 export class SignUp extends React.Component<{}, SignUpState> {
 
     state = {
+        canSubmit: false,
         loading: false,
         formFields: {
             email: {
@@ -142,21 +144,55 @@ export class SignUp extends React.Component<{}, SignUpState> {
     }
 
     handleSubmit = () => {
+        const canSubmit = Object.keys(this.state.formFields).every(field => {
+            return (this.state.formFields as any)[field].required ? (this.state.formFields as any)[field].touched && !(this.state.formFields as any)[field].validation.error : true;
+        });
 
+        console.log('can submit: ' + canSubmit);
     }
 
-    handleTouch = (e: React.FocusEvent<any>) => {
+    handleTouch = (e: React.FocusEvent<any>, field: string) => {
+
+        // const fieldKey: (keyof Field) = field;
         const currentState = { ...this.state };
+        const { value } = e.target;
+        const validationError = !(currentState as any).formFields[field].validation.validate(value);
+
+        const errorMsgs = [];
+
+        if (!value) {
+            errorMsgs.push('This field is required');
+        }
+
+        if (validationError) {
+
+            if (field === 'email') {
+                errorMsgs.push("This doesn't look like a valid e-mail");
+            } else if (field === 'username') {
+                errorMsgs.push('The username should be no longer', 'than 20 characters');
+            } else if (field === 'password') {
+                errorMsgs.push('Passwords should be between', '6 and 100 characters long');
+            }
+        }
+
         this.setState({
             ...currentState,
-            [e.currentTarget.name]: {
-                ...(currentState as any)[e.currentTarget.name],
-                touched: true
+            formFields: {
+                ...currentState.formFields,
+                [field]: {
+                    ...(currentState as any).formFields[field],
+                    touched: true,
+                    validation: {
+                        ...(currentState as any).formFields[field].validation,
+                        error: (!value || validationError) ? true : false,
+                        errorMsgs
+                    }
+                }
             }
         })
     }
 
-    handleChange = (e: (React.ChangeEvent<any>)) => {
+    handleChange = (e: React.ChangeEvent<any>) => {
         const currentState = { ...this.state };
         if (e.currentTarget.name === 'gender') {
             this.setState({
@@ -170,13 +206,33 @@ export class SignUp extends React.Component<{}, SignUpState> {
                 }
             })
         } else {
+            const field = (currentState as any).formFields[e.currentTarget.name];
+            const fieldName = e.currentTarget.name;
+            const { value } = e.currentTarget;
+
+            const validationError: boolean = Boolean(field.touched && !field.validation.validate(e.currentTarget.value));
+            const errorMsgs: string[] = [];
+
+            if (fieldName === 'email') {
+                errorMsgs.push("This doesn't look like a valid e-mail");
+            } else if (fieldName === 'username') {
+                errorMsgs.push('The username should be no longer', 'than 20 characters');
+            } else if (fieldName === 'password') {
+                errorMsgs.push('Passwords should be between', '6 and 100 characters long');
+            }
+
             this.setState({
                 ...currentState,
                 formFields: {
                     ...currentState.formFields,
-                    [e.currentTarget.name]: {
-                        ...(currentState as any).formFields[e.currentTarget.name],
-                        value: e.currentTarget.value
+                    [fieldName]: {
+                        ...(currentState as any).formFields[fieldName],
+                        value,
+                        validation: {
+                            ...(currentState.formFields as any)[fieldName].validation,
+                            error: validationError,
+                            errorMsgs
+                        }
                     }
                 }
             })
@@ -224,7 +280,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
                                         margin="normal"
                                         defaultValue={(formFields as any)[field].defaultValue || ""}
 
-                                        onBlur={this.handleTouch}
+                                        onBlur={e => this.handleTouch(e, field)}
 
                                         InputLabelProps={(formFields as any)[field].label === 'Birthdate' ? {
                                             shrink: true
@@ -233,15 +289,15 @@ export class SignUp extends React.Component<{}, SignUpState> {
                                         error={
                                             (formFields as any)[field].touched
                                             &&
-                                            (formFields as any)[field].error
+                                            (formFields as any)[field].validation.error
                                         }
                                     />
                                     {
                                         (formFields as any)[field].touched
                                             &&
-                                            (formFields as any)[field].error ?
+                                            (formFields as any)[field].validation.error ?
                                             (
-                                                (formFields as any)[field].errorMsgs.map((msg: string, index: number) => (
+                                                (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
                                                     <FormHelperText
                                                         key={index}
                                                         error={true}>

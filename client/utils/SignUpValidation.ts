@@ -31,11 +31,11 @@ function validateUser(user: any): boolean {
 }
 
 export function validateUsername(username: string): boolean {
-    return Boolean(username.trim() && (username.length <= 20));
+    return Boolean((username.length <= 20));
 }
 
 export function validatePassword(password: string): boolean {
-    return Boolean(password.trim() && (password.length >= 6) && (password.length <= 100));
+    return Boolean((password.length >= 6) && (password.length <= 100));
 }
 
 export function validateBirthdate(birthdate: string): boolean {
