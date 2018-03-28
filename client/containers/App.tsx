@@ -1,11 +1,12 @@
 import * as React from 'react';
-import classes from '../scss/containers/App/App.scss';
-import { NavLayout } from './Nav/NavLayout';
+// import classes from '../scss/containers/App/App.scss';
+// import { NavLayout } from './Nav/NavLayout';
 import { connect } from 'react-redux';
 import { State, User } from '../redux/state/initialState';
 import { loadUser } from '../redux/actions/actions';
 import { UserAction } from '../redux/actions/userActions';
 import { MainLayout } from '../components/MainLayout/MainLayout';
+import { CssBaseline } from 'material-ui';
 
 interface AppProps {
     project: string,
@@ -17,8 +18,8 @@ class App extends React.Component<AppProps, State> {
 
     render() {
         return (
-            <div className={classes.App}>
-                <NavLayout />
+            <div>
+                <CssBaseline />
                 <MainLayout />
             </div>
         )

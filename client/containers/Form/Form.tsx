@@ -1,18 +1,49 @@
 import * as React from 'react';
-import { Grid } from 'material-ui';
+import { Tabs, Tab, Typography, AppBar } from 'material-ui';
 
+const TabContainer: React.SFC = props => (
+    <Typography color="primary" component="h1">
+        {props.children}
+    </Typography>
+)
 export class Form extends React.Component {
+    state = {
+        value: 0
+    }
 
+    handleTabs = (_: React.ChangeEvent<{}>, value: number) => {
+        this.setState({ value })
+    }
     render() {
         return (
-            <Grid container justify="center">
-                <Grid item xl={6}>
-                    <h1>hi</h1>
-                </Grid>
-                <Grid item xl={6}>
-                    <h1>there</h1>
-                </Grid>
-            </Grid>
+            <React.Fragment>
+                <AppBar
+                    position="sticky"
+                    color="primary"
+                >
+                    <Tabs
+                        onChange={this.handleTabs}
+                        value={this.state.value}
+                        centered
+                        fullWidth={false}
+                    >
+                        <Tab label="Sign Up" />
+                        <Tab label="Sign In" />
+                    </Tabs>
+                </AppBar>
+                {
+                    this.state.value === 0 &&
+                    <TabContainer>
+                        Sign up!!
+                    </TabContainer>
+                }
+                {
+                    this.state.value === 1 &&
+                    <TabContainer>
+                        Sign in!!
+                    </TabContainer>
+                }
+            </React.Fragment>
         )
     }
 }
