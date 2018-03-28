@@ -1,9 +1,8 @@
 import * as React from 'react';
-// import { Auth } from '../../containers/Auth/Auth';
-import { Form } from '../../containers/Form/Form';
+import { Navbar } from '../../containers/Nav/Navbar';
 
 export const MainLayout: React.SFC = () => {
     return (
-        <Form />
+        <Navbar />
     )
 }   

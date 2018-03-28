@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Tabs, Tab, Typography, AppBar } from 'material-ui';
+import classes from '../../scss/containers/Nav/Navbar.scss';
 
 const TabContainer: React.SFC = props => (
     <Typography color="primary" component="h1">
         {props.children}
     </Typography>
 )
-export class Form extends React.Component {
+export class Navbar extends React.Component {
     state = {
         value: 0
     }
@@ -14,13 +15,18 @@ export class Form extends React.Component {
     handleTabs = (_: React.ChangeEvent<{}>, value: number) => {
         this.setState({ value })
     }
+
     render() {
         return (
             <React.Fragment>
                 <AppBar
                     position="sticky"
                     color="primary"
+                    className={classes.AppBar}
                 >
+                    <span>
+                        Accord
+                    </span>
                     <Tabs
                         onChange={this.handleTabs}
                         value={this.state.value}
@@ -29,6 +35,14 @@ export class Form extends React.Component {
                     >
                         <Tab label="Sign Up" />
                         <Tab label="Sign In" />
+                        <Tab
+                            className={classes.AboutTab}
+                            label="About"
+                        /* style={{
+                            position: 'absolute',
+                            left: '80%'
+                        }} */
+                        />
                     </Tabs>
                 </AppBar>
                 {
