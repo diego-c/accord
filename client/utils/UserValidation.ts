@@ -31,7 +31,7 @@ function validateUser(user: any): boolean {
 }
 
 export function validateUsername(username: string): boolean {
-    return Boolean((username.length <= 20));
+    return Boolean((username.length >= 3) && (username.length <= 20));
 }
 
 export function validatePassword(password: string): boolean {

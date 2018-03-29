@@ -5,9 +5,11 @@ import {
     validatePassword,
     validateBirthdate,
     validateGender
-} from '../../utils/SignUpValidation';
+} from '../../utils/UserValidation';
 import { Radio, Grid, TextField, FormControl, RadioGroup, FormControlLabel, FormLabel, Paper, Button, FormHelperText } from 'material-ui';
 import { fetch } from '../../axios/connect';
+import { AxiosResponse } from 'axios';
+import { CustomError } from '../../errors/CustomError';
 
 export const today: string =
     new Date().toLocaleDateString('en-US', {
@@ -184,17 +186,16 @@ export class SignUp extends React.Component<{}, SignUpState> {
         console.log('Signing up as: \n' + JSON.stringify(fields, null, 2));
 
         fetch.post('/signup', fields)
-            .then(res => {
+            .then((res: AxiosResponse) => {
                 console.log(JSON.stringify(res, null, 2));
             })
-            .catch(err => {
-                console.log('oops!! \n' + JSON.stringify(err, null, 2));
+            .catch((err: CustomError) => {
+                console.log('oops!! \n' + JSON.stringify(err.response.data, null, 2));
             })
     }
 
     handleTouch = (e: React.FocusEvent<any>, field: string) => {
 
-        // const fieldKey: (keyof Field) = field;
         const currentState = { ...this.state };
         const { value } = e.target;
         const validationError = !(currentState as any).formFields[field].validation.validate(value);
@@ -214,7 +215,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
             if (field === 'email') {
                 errorMsgs.push("This does not look like a valid e-mail");
             } else if (field === 'username') {
-                errorMsgs.push('The username should be no longer', 'than 20 characters');
+                errorMsgs.push('The username should be between', '3 than 20 characters');
             } else if (field === 'password') {
                 errorMsgs.push('Passwords should be between', '6 and 100 characters long');
             }
@@ -263,9 +264,9 @@ export class SignUp extends React.Component<{}, SignUpState> {
             }
 
             if (fieldName === 'email') {
-                errorMsgs.push("This doesn't look like a valid e-mail");
+                errorMsgs.push("This does not look like a valid e-mail");
             } else if (fieldName === 'username') {
-                errorMsgs.push('The username should be no longer', 'than 20 characters');
+                errorMsgs.push('The username should be between', '3 than 20 characters');
             } else if (fieldName === 'password') {
                 errorMsgs.push('Passwords should be between', '6 and 100 characters long');
             }
@@ -303,7 +304,8 @@ export class SignUp extends React.Component<{}, SignUpState> {
                         container
                         alignItems="center"
                         alignContent="center"
-                        direction="column">
+                        direction="column"
+                        style={{ padding: '3rem' }}>
                         {
                             Object.keys(formFields).map((field, index) => (
                                 field !== 'gender' &&
@@ -396,6 +398,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
                             color="primary"
                             disabled={!this.state.canSubmit}
                             onClick={this.handleSubmit}
+                            style={{ marginTop: '3rem' }}
                         >
                             Sign Up
                         </Button>

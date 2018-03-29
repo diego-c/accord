@@ -19,5 +19,5 @@ const login_1 = require("./routes/login");
 const app = express_1.default();
 const port = process.env.PORT || 3000;
 app.use('/api/signup', cors_1.cors, express_1.default.json(), signup_1.signUpRouter);
-app.use('/api/login', cors_1.cors, express_1.default.json(), login_1.loginRouter);
+app.use('/api/signin', cors_1.cors, express_1.default.json(), login_1.loginRouter);
 app.listen(port, () => console.log('listening on port ' + port + '...'));
