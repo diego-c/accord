@@ -43,7 +43,7 @@ function validateEmail(email: string): boolean {
 }
 
 function validateGender(gender: string): boolean {
-    if ((gender === Gender.Male) || (gender === Gender.Female) || (gender === Gender.None)) {
+    if ((gender === Gender.Male) || (gender === Gender.Female) || (gender === Gender.Other)) {
         return true;
     }
     return false;

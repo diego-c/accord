@@ -1,7 +1,7 @@
 export enum Gender {
     Male = 'Male',
     Female = 'Female',
-    None = 'None'
+    Other = 'Other'
 };
 
 export enum GlobalRole {

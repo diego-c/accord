@@ -4,7 +4,7 @@ var Gender;
 (function (Gender) {
     Gender["Male"] = "Male";
     Gender["Female"] = "Female";
-    Gender["None"] = "None";
+    Gender["Other"] = "Other";
 })(Gender = exports.Gender || (exports.Gender = {}));
 ;
 var GlobalRole;

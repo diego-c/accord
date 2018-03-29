@@ -7,6 +7,7 @@ import {
     validateGender
 } from '../../utils/SignUpValidation';
 import { Radio, Grid, TextField, FormControl, RadioGroup, FormControlLabel, FormLabel, Paper, Button, FormHelperText } from 'material-ui';
+import { fetch } from '../../axios/connect';
 
 export const today: string =
     new Date().toLocaleDateString('en-US', {
@@ -143,12 +144,52 @@ export class SignUp extends React.Component<{}, SignUpState> {
         }
     }
 
-    handleSubmit = () => {
-        const canSubmit = Object.keys(this.state.formFields).every(field => {
-            return (this.state.formFields as any)[field].required ? (this.state.formFields as any)[field].touched && !(this.state.formFields as any)[field].validation.error : true;
-        });
+    componentDidUpdate() {
+        const canSubmit = this.checkSubmit();
+        if (this.state.canSubmit !== canSubmit) {
+            this.setState({
+                ...this.state,
+                canSubmit: canSubmit
+            })
+        }
+    }
 
-        console.log('can submit: ' + canSubmit);
+    checkSubmit = () => {
+        return Object.keys(this.state.formFields).every(field => {
+            return (this.state.formFields as any)[field].required ? (this.state.formFields as any)[field].touched &&
+                !(this.state.formFields as any)[field].validation.errorMsgs.length :
+                true;
+        });
+    }
+
+    handleSubmit = () => {
+        const { formFields } = this.state;
+
+        const fields = Object.keys(formFields).map(f => {
+            if ((formFields as any)[f].value) {
+                return {
+                    [f]: (formFields as any)[f].value
+                }
+            } else {
+                return {
+                    'gender': (formFields as any)[f].currentValue
+                }
+            }
+        })
+            .reduce((acc: { [k: string]: string }, field, index, arr) => {
+                acc[Object.keys(arr[index])[0]] = Object.values(field)[0];
+                return acc;
+            }, {})
+
+        console.log('Signing up as: \n' + JSON.stringify(fields, null, 2));
+
+        fetch.post('/signup', fields)
+            .then(res => {
+                console.log(JSON.stringify(res, null, 2));
+            })
+            .catch(err => {
+                console.log('oops!! \n' + JSON.stringify(err, null, 2));
+            })
     }
 
     handleTouch = (e: React.FocusEvent<any>, field: string) => {
@@ -164,10 +205,14 @@ export class SignUp extends React.Component<{}, SignUpState> {
             errorMsgs.push('This field is required');
         }
 
+        if ((/\s/g).test(value)) {
+            errorMsgs.push('This field should not contain spaces')
+        }
+
         if (validationError) {
 
             if (field === 'email') {
-                errorMsgs.push("This doesn't look like a valid e-mail");
+                errorMsgs.push("This does not look like a valid e-mail");
             } else if (field === 'username') {
                 errorMsgs.push('The username should be no longer', 'than 20 characters');
             } else if (field === 'password') {
@@ -212,6 +257,10 @@ export class SignUp extends React.Component<{}, SignUpState> {
 
             const validationError: boolean = Boolean(field.touched && !field.validation.validate(e.currentTarget.value));
             const errorMsgs: string[] = [];
+
+            if ((/\s/g).test(value)) {
+                errorMsgs.push('This field should not contain spaces')
+            }
 
             if (fieldName === 'email') {
                 errorMsgs.push("This doesn't look like a valid e-mail");
@@ -345,6 +394,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
                             variant="raised"
                             size="large"
                             color="primary"
+                            disabled={!this.state.canSubmit}
                             onClick={this.handleSubmit}
                         >
                             Sign Up
