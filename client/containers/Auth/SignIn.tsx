@@ -123,7 +123,7 @@ export class SignIn extends React.Component<{}, SignInState> {
         }
 
         if (fieldName === 'username') {
-            errorMsgs.push('The username should be between', '3 than 20 characters');
+            errorMsgs.push('The username should be between', '3 than 20 characters long');
         } else if (fieldName === 'password') {
             errorMsgs.push('Passwords should be between', '6 and 100 characters long');
         }
@@ -183,6 +183,7 @@ export class SignIn extends React.Component<{}, SignInState> {
                     <Grid
                         container
                         alignItems="center"
+                        spacing={8}
                         alignContent="center"
                         direction="column"
                         style={{ padding: '3rem' }}>
@@ -191,7 +192,7 @@ export class SignIn extends React.Component<{}, SignInState> {
                                 <Grid
                                     item xs={12}
                                     xl={6}
-                                    spacing={8}
+                                    key={index}
                                 >
                                     <TextField
                                         key={index}
@@ -208,7 +209,6 @@ export class SignIn extends React.Component<{}, SignInState> {
 
                                         onChange={this.handleChange}
                                         margin="normal"
-                                        defaultValue={(formFields as any)[field].defaultValue || ""}
 
                                         onBlur={e => this.handleTouch(e, field)}
 

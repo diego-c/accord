@@ -1,6 +1,6 @@
-import { Action } from "redux";
+import * as Redux from "redux";
 import { User } from "../state/initialState";
 
-export interface UserAction extends Action {
+export interface UserAction extends Redux.Action {
     payload: User
 }

@@ -6,16 +6,6 @@ module.exports = {
     entry: {
         bundle: path.resolve(__dirname, '../client/index.tsx')
     },
-    output: {
-        filename: './js/[name]_[hash].js',
-        path: path.resolve(__dirname, '../build')
-    },
-    devServer: {
-        publicPath: '/',
-        contentBase: path.resolve(__dirname, '../build'),
-        port: 1337
-    },
-    devtool: 'source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.css']
     },
@@ -91,15 +81,5 @@ module.exports = {
             cache: true,
             inject: 'body'
         })
-    ],
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM",
-        "react-router": "ReactRouter",
-        "react-router-dom": "ReactRouterDOM",
-        "redux": "Redux",
-        "redux-thunk": "ReduxThunk",
-        "react-redux": "ReactRedux",
-        "axios": "axios"
-    }
+    ]
 }

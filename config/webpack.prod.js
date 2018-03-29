@@ -8,6 +8,15 @@ module.exports = merge(common, {
     entry: {
         bundle: ['babel-polyfill', path.resolve(__dirname, '../client/index.tsx')]
     },
+    optimization: {
+        runtimeChunk: true
+    },
+    output: {
+        chunkFilename: './js/[name].[chunkhash].js',
+        filename: './js/[name].[chunkhash].js',
+        path: path.resolve(__dirname, '../build')
+    },
+    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -27,6 +36,16 @@ module.exports = merge(common, {
             }
         ]
     },
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM",
+        "react-router": "ReactRouter",
+        "react-router-dom": "ReactRouterDOM",
+        "redux": "Redux",
+        "redux-thunk": "ReduxThunk",
+        "react-redux": "ReactRedux",
+        "axios": "axios"
+    },
     plugins: [
         new webpack.DefinePlugin({
             "__PRODUCTION__": JSON.stringify(true)
@@ -39,7 +58,7 @@ module.exports = merge(common, {
             background_color: '#dbdbdb',
             icons: [
                 {
-                    src: path.resolve(__dirname, '../client/', 'img/accord-logo.svg'),
+                    src: path.resolve(__dirname, '../client/assets/', 'img/accord-logo.svg'),
                     sizes: [96, 128, 144, 192, 256, 384, 512],
                     destination: './icons/'
                 }

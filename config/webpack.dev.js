@@ -1,7 +1,19 @@
 const common = require('./webpack.common')
-    , merge = require('webpack-merge');
+    , merge = require('webpack-merge')
+    , path = require('path');
 
 module.exports = merge(common, {
+    output: {
+        chunkFilename: './js/[name].[hash].js',
+        filename: './js/[name].[hash].js',
+        path: path.resolve(__dirname, '../build')
+    },
+    devtool: 'cheap-eval-module-source-map',
+    devServer: {
+        publicPath: '/',
+        contentBase: path.resolve(__dirname, '../build'),
+        port: 1337
+    },
     module: {
         rules: [
             {

@@ -215,7 +215,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
             if (field === 'email') {
                 errorMsgs.push("This does not look like a valid e-mail");
             } else if (field === 'username') {
-                errorMsgs.push('The username should be between', '3 than 20 characters');
+                errorMsgs.push('The username should be between', '3 than 20 characters long');
             } else if (field === 'password') {
                 errorMsgs.push('Passwords should be between', '6 and 100 characters long');
             }
@@ -303,6 +303,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
                     <Grid
                         container
                         alignItems="center"
+                        spacing={8}
                         alignContent="center"
                         direction="column"
                         style={{ padding: '3rem' }}>
@@ -312,7 +313,7 @@ export class SignUp extends React.Component<{}, SignUpState> {
                                 <Grid
                                     item xs={12}
                                     xl={6}
-                                    spacing={8}
+                                    key={index}
                                 >
                                     <TextField
                                         key={index}
@@ -329,7 +330,6 @@ export class SignUp extends React.Component<{}, SignUpState> {
 
                                         onChange={this.handleChange}
                                         margin="normal"
-                                        defaultValue={(formFields as any)[field].defaultValue || ""}
 
                                         onBlur={e => this.handleTouch(e, field)}
 
@@ -363,7 +363,6 @@ export class SignUp extends React.Component<{}, SignUpState> {
                         <Grid
                             item xs={12}
                             xl={6}
-                            spacing={8}
                             style={{ marginTop: '2rem', marginBottom: '2rem' }}>
                             <FormControl component="fieldset">
                                 <FormLabel

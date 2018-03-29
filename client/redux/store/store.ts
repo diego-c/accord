@@ -1,11 +1,11 @@
-import { createStore, compose, GenericStoreEnhancer } from 'redux';
+import * as Redux from 'redux';
 import { reducer } from "../reducers/reducers";
 import { initialState, State } from "../state/initialState";
-import { Store } from 'react-redux';
+// import * as ReactRedux from 'react-redux';
 
-const devToolsExtension: GenericStoreEnhancer = (window as any)['devToolsExtension'] ?
+const devToolsExtension: Redux.GenericStoreEnhancer = (window as any)['devToolsExtension'] ?
     (window as any)['devToolsExtension']() : f => f;
 
-const store: Store<State> = createStore(reducer, initialState, compose(devToolsExtension) as GenericStoreEnhancer)
+const store: Redux.Store<State> = Redux.createStore(reducer, initialState, Redux.compose(devToolsExtension) as Redux.GenericStoreEnhancer)
 
 export = store;
