@@ -17,7 +17,8 @@ module.exports = {
     devServer: {
         contentBase: path.resolve(__dirname, '../build'),
         compress: true,
-        port: 1337
+        port: 1337,
+        historyApiFallback: true
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.css']

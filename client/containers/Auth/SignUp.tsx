@@ -293,77 +293,86 @@ class SignUp extends React.Component<{}, SignUpState> {
         const { formFields } = this.state;
 
         return (
-            <Paper elevation={4} style={{
-                padding: '1rem'
-            }}>
+            <Paper elevation={4}
+                style={{ padding: '4rem 0' }}>
                 <form action="#" method="POST" style={{
-                    width: 'calc(100% - 16px)'
-                }
-                }>
+                    width: 'calc(100% - 40px)'
+                }}>
                     <Grid
                         container
                         alignItems="center"
-                        spacing={8}
+                        spacing={40}
+                        style={{ position: 'relative', marginBottom: '3rem' }}
                         alignContent="center"
-                        direction="column"
-                        style={{ padding: '3rem' }}>
-                        {
-                            Object.keys(formFields).map((field, index) => (
-                                field !== 'gender' &&
-                                <Grid
-                                    item xs={12}
-                                    xl={6}
-                                    key={index}
-                                >
-                                    <TextField
-                                        key={index}
-
-                                        name={field}
-
-                                        type={(formFields as any)[field].type}
-
-                                        label={(formFields as any)[field].label}
-
-                                        value={(formFields as any)[field].value}
-
-                                        required={(formFields as any)[field].required}
-
-                                        onChange={this.handleChange}
-                                        margin="normal"
-
-                                        onBlur={e => this.handleTouch(e, field)}
-
-                                        InputLabelProps={(formFields as any)[field].label === 'Birthdate' ? {
-                                            shrink: true
-                                        } : {}}
-
-                                        error={
-                                            (formFields as any)[field].touched
-                                            &&
-                                            (formFields as any)[field].validation.error
-                                        }
-                                    />
-                                    {
-                                        (formFields as any)[field].touched
-                                            &&
-                                            (formFields as any)[field].validation.error ?
-                                            (
-                                                (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
-                                                    <FormHelperText
-                                                        key={index}
-                                                        error={true}>
-                                                        {msg}
-                                                    </FormHelperText>
-                                                ))
-                                            ) : null
-                                    }
-                                </Grid>
-                            ))
-                        }
+                        justify="center"
+                        direction="row">
                         <Grid
-                            item xs={12}
-                            xl={6}
-                            style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                            item
+                        >
+                            <Grid
+                                container
+                                alignItems="center"
+                                alignContent="center"
+                                direction="column"
+                                spacing={16}
+                            >
+                                {
+                                    Object.keys(formFields).map((field, index) => (
+                                        field !== 'gender' &&
+                                        <Grid
+                                            item
+                                            key={index}
+                                        >
+                                            <TextField
+                                                key={index}
+
+                                                name={field}
+
+                                                type={(formFields as any)[field].type}
+
+                                                label={(formFields as any)[field].label}
+
+                                                value={(formFields as any)[field].value}
+
+                                                required={(formFields as any)[field].required}
+
+                                                onChange={this.handleChange}
+                                                margin="normal"
+
+                                                onBlur={e => this.handleTouch(e, field)}
+
+                                                InputLabelProps={(formFields as any)[field].label === 'Birthdate' ? {
+                                                    shrink: true
+                                                } : {}}
+
+                                                error={
+                                                    (formFields as any)[field].touched
+                                                    &&
+                                                    (formFields as any)[field].validation.error
+                                                }
+                                            />
+                                            {
+                                                (formFields as any)[field].touched
+                                                    &&
+                                                    (formFields as any)[field].validation.error ?
+                                                    (
+                                                        (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
+                                                            <FormHelperText
+                                                                key={index}
+                                                                error={true}>
+                                                                {msg}
+                                                            </FormHelperText>
+                                                        ))
+                                                    ) : null
+                                            }
+                                        </Grid>
+                                    ))
+                                }
+                            </Grid>
+                        </Grid>
+                        <Grid
+                            item
+                        >
                             <FormControl component="fieldset">
                                 <FormLabel
                                     component="legend"
@@ -391,16 +400,26 @@ class SignUp extends React.Component<{}, SignUpState> {
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
-                        <Button
-                            variant="raised"
-                            size="large"
-                            color="primary"
-                            disabled={!this.state.canSubmit}
-                            onClick={this.handleSubmit}
-                            style={{ marginTop: '3rem' }}
+                    </Grid>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="center"
+                        alignItems="center"
+                    >
+                        <Grid
+                            item
                         >
-                            Sign Up
+                            <Button
+                                variant="raised"
+                                size="large"
+                                color="primary"
+                                disabled={!this.state.canSubmit}
+                                onClick={this.handleSubmit}
+                            >
+                                Sign Up
                         </Button>
+                        </Grid>
                     </Grid>
                 </form >
             </Paper >
