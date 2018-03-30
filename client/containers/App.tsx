@@ -6,10 +6,10 @@ class App extends React.Component<{}, {}> {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <CssBaseline />
                 <MainLayout />
-            </div>
+            </React.Fragment>
         )
     }
 }

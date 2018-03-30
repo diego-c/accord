@@ -3,6 +3,7 @@ const path = require('path'),
     PWAManifest = require('webpack-pwa-manifest');
 
 module.exports = {
+    name: 'main',
     entry: {
         bundle: path.resolve(__dirname, '../client/index.tsx')
     },

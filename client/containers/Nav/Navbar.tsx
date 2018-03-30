@@ -1,14 +1,26 @@
 import * as React from 'react';
 import { Tabs, Tab, Typography, AppBar } from 'material-ui';
-import { SignUp } from '../Auth/SignUp';
-import { SignIn } from '../Auth/SignIn';
 import classes from '../../scss/containers/Nav/Navbar.scss';
+import { asyncComponent } from '../AsyncComponent/AsyncComponent';
+import { Link, Route } from 'react-router-dom';
 
 const TabContainer: React.SFC = props => (
     <Typography color="primary" component="h1">
         {props.children}
     </Typography>
-)
+);
+
+const SignUpComponent = asyncComponent(() => import('../Auth/SignUp').then((module: any) => module.default));
+
+const SignInComponent = asyncComponent(() => import('../Auth/SignIn').then((module: any) => module.default));
+
+const SignUpLink: React.SFC = props => (
+    <Link {...props} to="/signup" />
+);
+const SignInLink: React.SFC = props => (
+    <Link {...props} to="/signin" />
+);
+
 export class Navbar extends React.Component {
     state = {
         value: 0
@@ -35,8 +47,8 @@ export class Navbar extends React.Component {
                         centered
                         fullWidth={false}
                     >
-                        <Tab label="Sign Up" />
-                        <Tab label="Sign In" />
+                        <Tab label="Sign Up" component={SignUpLink} />
+                        <Tab label="Sign In" component={SignInLink} />
                         <Tab
                             className={classes.AboutTab}
                             label="About"
@@ -46,13 +58,13 @@ export class Navbar extends React.Component {
                 {
                     this.state.value === 0 &&
                     <TabContainer>
-                        <SignUp />
+                        <Route path="/signup" exact component={SignUpComponent} />
                     </TabContainer>
                 }
                 {
                     this.state.value === 1 &&
                     <TabContainer>
-                        <SignIn />
+                        <Route path="/signin" exact component={SignInComponent} />
                     </TabContainer>
                 }
             </React.Fragment>
