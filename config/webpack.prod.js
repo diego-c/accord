@@ -5,6 +5,7 @@ const common = require('./webpack.common')
     , PWAManifest = require('webpack-pwa-manifest');
 
 module.exports = merge(common, {
+    mode: 'production',
     entry: {
         bundle: ['babel-polyfill', path.resolve(__dirname, '../client/index.tsx')]
     },
@@ -48,7 +49,7 @@ module.exports = merge(common, {
     },
     plugins: [
         new webpack.DefinePlugin({
-            "__PRODUCTION__": JSON.stringify(true)
+            "process.env.NODE_ENV": 'production'
         }),
 
         new PWAManifest({

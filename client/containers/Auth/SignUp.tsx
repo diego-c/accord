@@ -67,7 +67,7 @@ interface SignUpState {
     }
 }
 
-export class SignUp extends React.Component<{}, SignUpState> {
+class SignUp extends React.Component<{}, SignUpState> {
 
     state = {
         canSubmit: false,
@@ -407,3 +407,5 @@ export class SignUp extends React.Component<{}, SignUpState> {
         )
     }
 }
+
+export default SignUp;

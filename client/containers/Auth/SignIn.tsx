@@ -17,7 +17,7 @@ interface SignInState {
     formFields: SignInFields
 }
 
-export class SignIn extends React.Component<{}, SignInState> {
+class SignIn extends React.Component<{}, SignInState> {
     state = {
         canSubmit: false,
         loading: true,
@@ -251,3 +251,5 @@ export class SignIn extends React.Component<{}, SignInState> {
         )
     }
 }
+
+export default SignIn;

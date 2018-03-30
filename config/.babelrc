@@ -1,19 +1,10 @@
 {
     "presets": [
-        [
-            "@babel/env",
-            {
-                "targets": {
-                    "browsers": [
-                        "> 1%",
-                        "last 2 versions",
-                        "not ie < 9"
-                    ]
-                },
-                "useBuiltIns": "../src/index.tsx"
-            }
-        ],
+        "@babel/env",
         "@babel/react",
         "@babel/stage-2"
+    ],
+    "plugins": [
+        "syntax-dynamic-import"
     ]
 }
