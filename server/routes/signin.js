@@ -19,7 +19,7 @@ loginRouter
     const user = req.body;
     const loginValidation = BasicLoginValidation_1.validateLogin(user);
     if (typeof loginValidation === 'boolean' && loginValidation === false) {
-        return res.status(403).json({ reason: 'Please fill all the required fields before submitting the request' });
+        return res.status(403).json({ reason: 'ValidationError', message: 'Please fill all the required fields before submitting the request' });
     }
     else {
         if (loginValidation.username && loginValidation.password) {

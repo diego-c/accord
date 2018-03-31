@@ -17,7 +17,7 @@ signUpRouter
         const validation: boolean | SignUpValidation = validateSignUp(user);
 
         if (typeof validation === 'boolean' && validation === false) {
-            return res.status(403).json({ reason: 'ValidationError', message: 'Please fill all fields before sending the request' });
+            return res.status(403).json({ reason: 'ValidationError', message: 'Please fill all the required fields before submitting the request' });
         } else {
             signUpValidation(user)
                 .then(response => {
