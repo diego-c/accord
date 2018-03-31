@@ -5,6 +5,7 @@ import { validateUsername, validatePassword } from '../../utils/UserValidation';
 import { Paper, Grid, TextField, FormHelperText, Button } from 'material-ui';
 import { CustomError } from '../../errors/CustomError';
 import { AxiosResponse } from 'axios';
+import { CircularProgress } from 'material-ui';
 
 interface SignInFields {
     username: Field,
@@ -49,12 +50,19 @@ class SignIn extends React.Component<{}, SignInState> {
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            ...this.state,
+            loading: false
+        })
+    }
+
     componentDidUpdate() {
         const canSubmit = this.checkSubmit();
         if (this.state.canSubmit !== canSubmit) {
             this.setState({
                 ...this.state,
-                canSubmit: canSubmit
+                canSubmit
             })
         }
     }
@@ -146,6 +154,11 @@ class SignIn extends React.Component<{}, SignInState> {
     }
 
     handleSubmit = () => {
+        this.setState({
+            ...this.state,
+            loading: true
+        });
+
         const { formFields } = this.state;
 
         const fields = Object.keys(formFields).map(f => {
@@ -162,93 +175,115 @@ class SignIn extends React.Component<{}, SignInState> {
 
         fetch.post('/signin', fields)
             .then((res: AxiosResponse) => {
+                this.setState({
+                    ...this.state,
+                    loading: false
+                })
                 console.log(JSON.stringify(res, null, 2));
             })
             .catch((err: CustomError) => {
+                this.setState({
+                    ...this.state,
+                    loading: false
+                })
                 console.log('oops!! \n' + JSON.stringify(err.response.data, null, 2));
             })
     }
 
     render() {
         const { formFields } = this.state;
+        const { loading } = this.state;
 
-        return (
-            <Paper elevation={4} style={{
-                padding: '1rem'
-            }}>
-                <form action="#" method="POST" style={{
-                    width: 'calc(100% - 16px)'
-                }
-                }>
-                    <Grid
-                        container
-                        alignItems="center"
-                        spacing={8}
-                        alignContent="center"
-                        direction="column"
-                        style={{ padding: '3rem' }}>
-                        {
-                            Object.keys(formFields).map((field, index) => (
-                                <Grid
-                                    item xs={12}
-                                    xl={6}
-                                    key={index}
-                                >
-                                    <TextField
-                                        key={index}
-
-                                        name={field}
-
-                                        type={(formFields as any)[field].type}
-
-                                        label={(formFields as any)[field].label}
-
-                                        value={(formFields as any)[field].value}
-
-                                        required={(formFields as any)[field].required}
-
-                                        onChange={this.handleChange}
-                                        margin="normal"
-
-                                        onBlur={e => this.handleTouch(e, field)}
-
-                                        error={
-                                            (formFields as any)[field].touched
-                                            &&
-                                            (formFields as any)[field].validation.error
-                                        }
-                                    />
-                                    {
-                                        (formFields as any)[field].touched
-                                            &&
-                                            (formFields as any)[field].validation.error ?
-                                            (
-                                                (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
-                                                    <FormHelperText
-                                                        key={index}
-                                                        error={true}>
-                                                        {msg}
-                                                    </FormHelperText>
-                                                ))
-                                            ) : null
-                                    }
-                                </Grid>
-                            ))
-                        }
-                        <Button
-                            variant="raised"
-                            size="large"
-                            color="primary"
-                            disabled={!this.state.canSubmit}
-                            onClick={this.handleSubmit}
-                            style={{ marginTop: '3rem' }}
-                        >
-                            Sign In
-                        </Button>
+        return loading ?
+            (
+                <Grid
+                    container
+                    direction="row"
+                    style={{ width: '100%' }}
+                    justify="center"
+                >
+                    <Grid item>
+                        <CircularProgress style={{ margin: '10rem auto' }} size={80} />
                     </Grid>
-                </form >
-            </Paper >
-        )
+                </Grid>
+            )
+            : (
+                <Paper elevation={4} style={{
+                    padding: '1rem'
+                }}>
+                    <form action="#" method="POST" style={{
+                        width: 'calc(100% - 16px)'
+                    }
+                    }>
+                        <Grid
+                            container
+                            alignItems="center"
+                            spacing={8}
+                            alignContent="center"
+                            direction="column"
+                            style={{ padding: '3rem' }}>
+                            {
+                                Object.keys(formFields).map((field, index) => (
+                                    <Grid
+                                        item xs={12}
+                                        xl={6}
+                                        key={index}
+                                    >
+                                        <TextField
+                                            key={index}
+
+                                            name={field}
+
+                                            type={(formFields as any)[field].type}
+
+                                            label={(formFields as any)[field].label}
+
+                                            value={(formFields as any)[field].value}
+
+                                            required={(formFields as any)[field].required}
+
+                                            onChange={this.handleChange}
+                                            margin="normal"
+
+                                            onBlur={e => this.handleTouch(e, field)}
+
+                                            error={
+                                                (formFields as any)[field].touched
+                                                &&
+                                                (formFields as any)[field].validation.error
+                                            }
+                                        />
+                                        {
+                                            (formFields as any)[field].touched
+                                                &&
+                                                (formFields as any)[field].validation.error ?
+                                                (
+                                                    (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
+                                                        <FormHelperText
+                                                            key={index}
+                                                            error={true}>
+                                                            {msg}
+                                                        </FormHelperText>
+                                                    ))
+                                                ) : null
+                                        }
+                                    </Grid>
+                                ))
+                            }
+                            <Button
+                                variant="raised"
+                                size="large"
+                                color="primary"
+                                disabled={!this.state.canSubmit}
+                                onClick={this.handleSubmit}
+                                style={{ marginTop: '3rem' }}
+                            >
+                                Sign In
+                        </Button>
+                        </Grid>
+                    </form >
+                </Paper >
+            )
     }
 }
 
