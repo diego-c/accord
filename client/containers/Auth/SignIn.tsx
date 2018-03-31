@@ -6,6 +6,7 @@ import { Paper, Grid, TextField, FormHelperText, Button } from 'material-ui';
 import { CustomError } from '../../errors/CustomError';
 import { AxiosResponse } from 'axios';
 import { CircularProgress } from 'material-ui';
+import { Notification } from '../../components/Notification/Notification';
 
 interface SignInFields {
     username: Field,
@@ -13,6 +14,10 @@ interface SignInFields {
 }
 
 interface SignInState {
+    signInError: {
+        error: boolean,
+        message: string
+    },
     canSubmit: boolean,
     loading: boolean,
     formFields: SignInFields
@@ -20,6 +25,10 @@ interface SignInState {
 
 class SignIn extends React.Component<{}, SignInState> {
     state = {
+        signInError: {
+            error: false,
+            message: ''
+        },
         canSubmit: false,
         loading: true,
         formFields: {
@@ -171,28 +180,40 @@ class SignIn extends React.Component<{}, SignInState> {
                 return acc;
             }, {})
 
-        console.log('Signing in as: \n' + JSON.stringify(fields, null, 2));
-
         fetch.post('/signin', fields)
-            .then((res: AxiosResponse) => {
+            .then((_: AxiosResponse) => {
                 this.setState({
                     ...this.state,
                     loading: false
                 })
-                console.log(JSON.stringify(res, null, 2));
             })
             .catch((err: CustomError) => {
                 this.setState({
                     ...this.state,
-                    loading: false
+                    loading: false,
+                    signInError: {
+                        error: true,
+                        message: err.response.data.message
+                    }
                 })
-                console.log('oops!! \n' + JSON.stringify(err.response.data, null, 2));
             })
+    }
+
+    handleNotification = (_: React.SyntheticEvent<any>, __: string) => {
+        this.setState({
+            ...this.state,
+            signInError: {
+                error: false,
+                message: ''
+            }
+        })
     }
 
     render() {
         const { formFields } = this.state;
         const { loading } = this.state;
+        const { error } = this.state.signInError;
+        const { message: errorMsg } = this.state.signInError;
 
         return loading ?
             (
@@ -208,81 +229,91 @@ class SignIn extends React.Component<{}, SignInState> {
                 </Grid>
             )
             : (
-                <Paper elevation={4} style={{
-                    padding: '1rem'
-                }}>
-                    <form action="#" method="POST" style={{
-                        width: 'calc(100% - 16px)'
-                    }
-                    }>
-                        <Grid
-                            container
-                            alignItems="center"
-                            spacing={8}
-                            alignContent="center"
-                            direction="column"
-                            style={{ padding: '3rem' }}>
-                            {
-                                Object.keys(formFields).map((field, index) => (
-                                    <Grid
-                                        item xs={12}
-                                        xl={6}
-                                        key={index}
-                                    >
-                                        <TextField
+                <React.Fragment>
+                    <Notification
+                        open={error}
+                        vertical="top"
+                        horizontal="center"
+                        message={errorMsg}
+                        close={this.handleNotification}
+                    />
+
+                    <Paper elevation={4} style={{
+                        padding: '1rem'
+                    }}>
+                        <form action="#" method="POST" style={{
+                            width: 'calc(100% - 16px)'
+                        }
+                        }>
+                            <Grid
+                                container
+                                alignItems="center"
+                                spacing={8}
+                                alignContent="center"
+                                direction="column"
+                                style={{ padding: '3rem' }}>
+                                {
+                                    Object.keys(formFields).map((field, index) => (
+                                        <Grid
+                                            item xs={12}
+                                            xl={6}
                                             key={index}
+                                        >
+                                            <TextField
+                                                key={index}
 
-                                            name={field}
+                                                name={field}
 
-                                            type={(formFields as any)[field].type}
+                                                type={(formFields as any)[field].type}
 
-                                            label={(formFields as any)[field].label}
+                                                label={(formFields as any)[field].label}
 
-                                            value={(formFields as any)[field].value}
+                                                value={(formFields as any)[field].value}
 
-                                            required={(formFields as any)[field].required}
+                                                required={(formFields as any)[field].required}
 
-                                            onChange={this.handleChange}
-                                            margin="normal"
+                                                onChange={this.handleChange}
+                                                margin="normal"
 
-                                            onBlur={e => this.handleTouch(e, field)}
+                                                onBlur={e => this.handleTouch(e, field)}
 
-                                            error={
+                                                error={
+                                                    (formFields as any)[field].touched
+                                                    &&
+                                                    (formFields as any)[field].validation.error
+                                                }
+                                            />
+                                            {
                                                 (formFields as any)[field].touched
-                                                &&
-                                                (formFields as any)[field].validation.error
+                                                    &&
+                                                    (formFields as any)[field].validation.error ?
+                                                    (
+                                                        (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
+                                                            <FormHelperText
+                                                                key={index}
+                                                                error={true}>
+                                                                {msg}
+                                                            </FormHelperText>
+                                                        ))
+                                                    ) : null
                                             }
-                                        />
-                                        {
-                                            (formFields as any)[field].touched
-                                                &&
-                                                (formFields as any)[field].validation.error ?
-                                                (
-                                                    (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
-                                                        <FormHelperText
-                                                            key={index}
-                                                            error={true}>
-                                                            {msg}
-                                                        </FormHelperText>
-                                                    ))
-                                                ) : null
-                                        }
-                                    </Grid>
-                                ))
-                            }
-                            <Button
-                                variant="raised"
-                                size="large"
-                                color="primary"
-                                disabled={!this.state.canSubmit}
-                                onClick={this.handleSubmit}
-                                style={{ marginTop: '3rem' }}
-                            >
-                                Sign In
+                                        </Grid>
+                                    ))
+                                }
+                                <Button
+                                    variant="raised"
+                                    size="large"
+                                    color="primary"
+                                    disabled={!this.state.canSubmit}
+                                    onClick={this.handleSubmit}
+                                    style={{ marginTop: '3rem' }}
+                                >
+                                    Sign In
                         </Button>
-                        </Grid>
-                    </form >
-                </Paper >
+                            </Grid>
+                        </form >
+                    </Paper >
+                </React.Fragment>
             )
     }
 }

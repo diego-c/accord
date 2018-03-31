@@ -13,6 +13,7 @@ import { CustomError } from '../../errors/CustomError';
 import { DatePicker } from 'material-ui-pickers';
 import { format } from 'date-fns';
 import { CircularProgress } from 'material-ui';
+import { Notification } from '../../components/Notification/Notification';
 
 export type Field = {
     touched: boolean,
@@ -36,6 +37,10 @@ type GenderField = {
 }
 
 interface SignUpState {
+    signUpError: {
+        error: boolean,
+        message: string
+    },
     canSubmit: boolean,
     loading: boolean,
     formFields: {
@@ -54,6 +59,10 @@ interface SignUpState {
 class SignUp extends React.Component<{}, SignUpState> {
 
     state = {
+        signUpError: {
+            error: false,
+            message: ''
+        },
         canSubmit: false,
         loading: true,
         formFields: {
@@ -154,6 +163,16 @@ class SignUp extends React.Component<{}, SignUpState> {
         });
     }
 
+    handleNotification = (_: React.SyntheticEvent<any>, __: string) => {
+        this.setState({
+            ...this.state,
+            signUpError: {
+                error: false,
+                message: ''
+            }
+        })
+    }
+
     handleDateChange = (date: Date) => {
         this.setState({
             ...this.state,
@@ -199,22 +218,22 @@ class SignUp extends React.Component<{}, SignUpState> {
                 return acc;
             }, {})
 
-        console.log('Signing up as: \n' + JSON.stringify(fields, null, 2));
-
         fetch.post('/signup', fields)
-            .then((res: AxiosResponse) => {
+            .then((_: AxiosResponse) => {
                 this.setState({
                     ...this.state,
                     loading: false
                 })
-                console.log(JSON.stringify(res, null, 2));
             })
             .catch((err: CustomError) => {
                 this.setState({
                     ...this.state,
+                    signUpError: {
+                        error: true,
+                        message: err.response.data.message
+                    },
                     loading: false
                 })
-                console.log('oops!! \n' + JSON.stringify(err.response.data, null, 2));
             })
     }
 
@@ -318,6 +337,8 @@ class SignUp extends React.Component<{}, SignUpState> {
     render() {
         const { formFields } = this.state;
         const { loading } = this.state;
+        const { error } = this.state.signUpError;
+        const { message: errorMsg } = this.state.signUpError;
 
         return loading ?
             (
@@ -333,165 +354,174 @@ class SignUp extends React.Component<{}, SignUpState> {
                 </Grid>
             ) :
             (
-                <Paper elevation={4}
-                    style={{ padding: '4rem 0' }}>
-                    <form action="#" method="POST" style={{
-                        width: 'calc(100% - 40px)'
-                    }}>
-                        <Grid
-                            container
-                            alignItems="center"
-                            spacing={40}
-                            style={{ position: 'relative', marginBottom: '3rem' }}
-                            alignContent="center"
-                            justify="center"
-                            direction="row">
+                <React.Fragment>
+                    <Notification
+                        open={error}
+                        vertical="top"
+                        horizontal="center"
+                        message={errorMsg}
+                        close={this.handleNotification}
+                    />
+                    <Paper elevation={4}
+                        style={{ padding: '4rem 0' }}>
+                        <form action="#" method="POST" style={{
+                            width: 'calc(100% - 40px)'
+                        }}>
                             <Grid
-                                item
-                            >
+                                container
+                                alignItems="center"
+                                spacing={40}
+                                style={{ position: 'relative', marginBottom: '3rem' }}
+                                alignContent="center"
+                                justify="center"
+                                direction="row">
                                 <Grid
-                                    container
-                                    alignItems="center"
-                                    alignContent="center"
-                                    direction="column"
-                                    spacing={16}
+                                    item
                                 >
-                                    {
-                                        Object.keys(formFields).map((field, index) => (
-                                            (field !== 'gender') &&
-                                            (field !== 'birthdate') &&
-                                            <Grid
-                                                item
-                                                key={index}
-                                            >
-                                                <TextField
-                                                    key={index}
-
-                                                    name={field}
-
-                                                    type={(formFields as any)[field].type}
-
-                                                    label={(formFields as any)[field].label}
-
-                                                    value={(formFields as any)[field].value}
-
-                                                    required={(formFields as any)[field].required}
-
-                                                    onChange={this.handleChange}
-                                                    margin="normal"
-
-                                                    onBlur={e => this.handleTouch(e, field)}
-
-                                                    InputLabelProps={(formFields as any)[field].label === 'Birthdate' ? {
-                                                        shrink: true
-                                                    } : {}}
-
-                                                    error={
-                                                        (formFields as any)[field].touched
-                                                        &&
-                                                        (formFields as any)[field].validation.error
-                                                    }
-                                                />
-                                                {
-                                                    (formFields as any)[field].touched
-                                                        &&
-                                                        (formFields as any)[field].validation.error ?
-                                                        (
-                                                            (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
-                                                                <FormHelperText
-                                                                    key={index}
-                                                                    error={true}>
-                                                                    {msg}
-                                                                </FormHelperText>
-                                                            ))
-                                                        ) : null
-                                                }
-                                            </Grid>
-                                        ))
-                                    }
                                     <Grid
-                                        item
-                                        style={{ margin: '2rem 0' }}
+                                        container
+                                        alignItems="center"
+                                        alignContent="center"
+                                        direction="column"
+                                        spacing={16}
                                     >
-                                        <DatePicker
-                                            keyboard
-                                            required
-                                            label="Birthdate (MM/DD/YYYY)"
-                                            disableFuture={true}
-                                            format="MM/DD/YYYY"
-                                            placeholder="03/30/2018"
-                                            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-                                            value={this.state.formFields.birthdate.value}
-                                            animateYearScrolling={false}
-                                            name="birthdate"
-                                            onChange={this.handleDateChange}
-                                        />
                                         {
-                                            (formFields as any)['birthdate'].validation.errorMsgs.map((msg: string, index: number) => (
-                                                <FormHelperText
+                                            Object.keys(formFields).map((field, index) => (
+                                                (field !== 'gender') &&
+                                                (field !== 'birthdate') &&
+                                                <Grid
+                                                    item
                                                     key={index}
-                                                    error={true}
                                                 >
-                                                    {msg}
-                                                </FormHelperText>
+                                                    <TextField
+                                                        key={index}
+
+                                                        name={field}
+
+                                                        type={(formFields as any)[field].type}
+
+                                                        label={(formFields as any)[field].label}
+
+                                                        value={(formFields as any)[field].value}
+
+                                                        required={(formFields as any)[field].required}
+
+                                                        onChange={this.handleChange}
+                                                        margin="normal"
+
+                                                        onBlur={e => this.handleTouch(e, field)}
+
+                                                        InputLabelProps={(formFields as any)[field].label === 'Birthdate' ? {
+                                                            shrink: true
+                                                        } : {}}
+
+                                                        error={
+                                                            (formFields as any)[field].touched
+                                                            &&
+                                                            (formFields as any)[field].validation.error
+                                                        }
+                                                    />
+                                                    {
+                                                        (formFields as any)[field].touched
+                                                            &&
+                                                            (formFields as any)[field].validation.error ?
+                                                            (
+                                                                (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
+                                                                    <FormHelperText
+                                                                        key={index}
+                                                                        error={true}>
+                                                                        {msg}
+                                                                    </FormHelperText>
+                                                                ))
+                                                            ) : null
+                                                    }
+                                                </Grid>
                                             ))
                                         }
+                                        <Grid
+                                            item
+                                            style={{ margin: '2rem 0' }}
+                                        >
+                                            <DatePicker
+                                                keyboard
+                                                required
+                                                label="Birthdate (MM/DD/YYYY)"
+                                                disableFuture={true}
+                                                format="MM/DD/YYYY"
+                                                placeholder="03/30/2018"
+                                                mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                                                value={this.state.formFields.birthdate.value}
+                                                animateYearScrolling={false}
+                                                name="birthdate"
+                                                onChange={this.handleDateChange}
+                                            />
+                                            {
+                                                (formFields as any)['birthdate'].validation.errorMsgs.map((msg: string, index: number) => (
+                                                    <FormHelperText
+                                                        key={index}
+                                                        error={true}
+                                                    >
+                                                        {msg}
+                                                    </FormHelperText>
+                                                ))
+                                            }
+                                        </Grid>
                                     </Grid>
+                                </Grid>
+                                <Grid
+                                    item
+                                >
+                                    <FormControl component="fieldset">
+                                        <FormLabel
+                                            component="legend"
+                                            style={{ marginBottom: '1rem' }}
+                                        >
+                                            Gender
+                            </FormLabel>
+                                        <RadioGroup
+                                            aria-label="gender"
+                                            onChange={this.handleChange}
+                                            name="gender"
+                                            value={formFields.gender.currentValue}
+                                        >
+                                            {
+                                                formFields.gender['fields'].map((_, index, arr) => (
+                                                    <FormControlLabel
+                                                        key={index}
+                                                        value={arr[index].value}
+                                                        control={
+                                                            <Radio color="primary" />}
+                                                        label={arr[index].label}
+                                                    />
+                                                ))
+                                            }
+                                        </RadioGroup>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                             <Grid
-                                item
+                                container
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
                             >
-                                <FormControl component="fieldset">
-                                    <FormLabel
-                                        component="legend"
-                                        style={{ marginBottom: '1rem' }}
-                                    >
-                                        Gender
-                            </FormLabel>
-                                    <RadioGroup
-                                        aria-label="gender"
-                                        onChange={this.handleChange}
-                                        name="gender"
-                                        value={formFields.gender.currentValue}
-                                    >
-                                        {
-                                            formFields.gender['fields'].map((_, index, arr) => (
-                                                <FormControlLabel
-                                                    key={index}
-                                                    value={arr[index].value}
-                                                    control={
-                                                        <Radio color="primary" />}
-                                                    label={arr[index].label}
-                                                />
-                                            ))
-                                        }
-                                    </RadioGroup>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="center"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                            >
-                                <Button
-                                    variant="raised"
-                                    size="large"
-                                    color="primary"
-                                    disabled={!this.state.canSubmit}
-                                    onClick={this.handleSubmit}
+                                <Grid
+                                    item
                                 >
-                                    Sign Up
+                                    <Button
+                                        variant="raised"
+                                        size="large"
+                                        color="primary"
+                                        disabled={!this.state.canSubmit}
+                                        onClick={this.handleSubmit}
+                                    >
+                                        Sign Up
                         </Button>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </form >
-                </Paper >
+                        </form >
+                    </Paper >
+                </React.Fragment>
             )
     }
 }
