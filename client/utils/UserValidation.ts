@@ -39,7 +39,7 @@ export function validatePassword(password: string): boolean {
 }
 
 export function validateBirthdate(birthdate: string): boolean {
-    return Boolean(/\d{4}\-\d{2}\-\d{2}/.test(birthdate));
+    return Boolean(/^\d{4}\-\d{2}\-\d{2}./.test(birthdate));
 }
 
 export function validateEmail(email: string): boolean {

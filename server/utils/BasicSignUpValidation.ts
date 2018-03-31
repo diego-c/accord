@@ -35,7 +35,7 @@ function validatePassword(password: string): boolean {
 }
 
 function validateBirthdate(birthdate: string): boolean {
-    return Boolean(/\d{4}\-\d{2}\-\d{2}/.test(birthdate));
+    return Boolean(/^\d{4}\-\d{2}\-\d{2}$/.test(birthdate));
 }
 
 function validateEmail(email: string): boolean {

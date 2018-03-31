@@ -10,31 +10,14 @@ import { Radio, Grid, TextField, FormControl, RadioGroup, FormControlLabel, Form
 import { fetch } from '../../axios/connect';
 import { AxiosResponse } from 'axios';
 import { CustomError } from '../../errors/CustomError';
-
-export const today: string =
-    new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    })
-        .split('/')
-        .reduce((acc: string[], field: string, index: number) => {
-            if (/\d{4}/.test(field)) {
-                acc.splice(0, 0, field);
-            } else if (index === 0) {
-                acc.splice(1, 0, field);
-            } else {
-                acc.splice(2, 0, field);
-            }
-            return acc;
-        }, [])
-        .join('-');
+import { DatePicker } from 'material-ui-pickers';
+import { format } from 'date-fns';
 
 export type Field = {
     touched: boolean,
     type: string,
     label: string,
-    value: string,
+    value: string | Date,
     required: boolean,
     validation: {
         validate: (val: string) => boolean,
@@ -113,9 +96,8 @@ class SignUp extends React.Component<{}, SignUpState> {
                 touched: false,
                 type: 'date',
                 label: 'Birthdate',
-                value: '',
+                value: new Date(),
                 required: true,
-                defaultValue: today,
                 validation: {
                     validate: validateBirthdate,
                     error: false,
@@ -164,13 +146,33 @@ class SignUp extends React.Component<{}, SignUpState> {
         });
     }
 
+    handleDateChange = (date: any) => {
+        this.setState({
+            ...this.state,
+            formFields: {
+                ...this.state.formFields,
+                birthdate: {
+                    ...this.state.formFields.birthdate,
+                    touched: true,
+                    value: date
+                }
+            }
+        })
+    }
+
     handleSubmit = () => {
         const { formFields } = this.state;
 
         const fields = Object.keys(formFields).map(f => {
             if ((formFields as any)[f].value) {
-                return {
-                    [f]: (formFields as any)[f].value
+                if (f !== 'birthdate') {
+                    return {
+                        [f]: (formFields as any)[f].value
+                    }
+                } else {
+                    return {
+                        [f]: format((formFields as any)[f].value, 'YYYY-MM-DD')
+                    }
                 }
             } else {
                 return {
@@ -218,6 +220,8 @@ class SignUp extends React.Component<{}, SignUpState> {
                 errorMsgs.push('The username should be between', '3 than 20 characters long');
             } else if (field === 'password') {
                 errorMsgs.push('Passwords should be between', '6 and 100 characters long');
+            } else if (field === 'birthdate') {
+                errorMsgs.push('Birthdate should follow the format MM/DD/YYYY')
             }
         }
 
@@ -318,7 +322,8 @@ class SignUp extends React.Component<{}, SignUpState> {
                             >
                                 {
                                     Object.keys(formFields).map((field, index) => (
-                                        field !== 'gender' &&
+                                        (field !== 'gender') &&
+                                        (field !== 'birthdate') &&
                                         <Grid
                                             item
                                             key={index}
@@ -368,6 +373,33 @@ class SignUp extends React.Component<{}, SignUpState> {
                                         </Grid>
                                     ))
                                 }
+                                <Grid
+                                    item
+                                    style={{ margin: '2rem 0' }}
+                                >
+                                    <DatePicker
+                                        keyboard
+                                        required
+                                        label="Birthdate (MM/DD/YYYY)"
+                                        format="MM/DD/YYYY"
+                                        placeholder="03/30/2018"
+                                        mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                                        value={this.state.formFields.birthdate.value}
+                                        animateYearScrolling={false}
+                                        name="birthdate"
+                                        onChange={this.handleDateChange}
+                                    />
+                                    {
+                                        (formFields as any)['birthdate'].validation.errorMsgs.map((msg: string, index: number) => (
+                                            <FormHelperText
+                                                key={index}
+                                                error={true}
+                                            >
+                                                {msg}
+                                            </FormHelperText>
+                                        ))
+                                    }
+                                </Grid>
                             </Grid>
                         </Grid>
                         <Grid

@@ -24,7 +24,7 @@ function validatePassword(password) {
     return Boolean(password.trim() && (password.length >= 6) && (password.length <= 100));
 }
 function validateBirthdate(birthdate) {
-    return Boolean(/\d{4}\-\d{2}\-\d{2}/.test(birthdate));
+    return Boolean(/^\d{4}\-\d{2}\-\d{2}$/.test(birthdate));
 }
 function validateEmail(email) {
     return Boolean((/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) && (email.length <= 254));
