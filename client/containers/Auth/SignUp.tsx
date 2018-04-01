@@ -219,7 +219,9 @@ class SignUp extends React.Component<{}, SignUpState> {
             }, {})
 
         fetch.post('/signup', fields)
-            .then((_: AxiosResponse) => {
+            .then((res: AxiosResponse) => {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('public_key', res.data['public_key']);
                 this.setState({
                     ...this.state,
                     loading: false

@@ -3,11 +3,14 @@ import { SignUpValidation, validateSignUp } from '../utils/BasicSignUpValidation
 import { signUpValidation } from '../utils/SignUpValidation';
 import { ValidationError } from '../errors/ValidationError';
 import { UsernameAlreadyInUseError } from '../errors/UsernameAlreadyInUseError';
-import { BasicUser, SignUp } from '../db/schema';
+import { BasicUser, SignUp, GlobalRole } from '../db/schema';
 import { Hashed, hashPassword } from '../utils/HashPassword';
 import { connect } from '../db/connect';
 import { QueryResult } from 'pg';
 import { EmailAlreadyInUseError } from '../errors/EmailAlreadyInUseError';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import { sign } from 'jsonwebtoken';
 const signUpRouter: express.Router = express.Router();
 
 signUpRouter
@@ -47,7 +50,28 @@ signUpRouter
 
                         connect(query, [validUser.email, validUser.username, validUser.hash, validUser.salt, validUser.gender, validUser.birthdate])
                             .then((result: QueryResult) => {
-                                return res.status(200).json(result);
+                                const publicKey = readFileSync(resolve(__dirname, typeof process.env.PUBLIC_KEY === 'string' ? process.env.PUBLIC_KEY : ''), {
+                                    encoding: 'utf8',
+                                    flag: 'r'
+                                });
+
+                                const privateKey = readFileSync(resolve(__dirname, typeof process.env.PRIVATE_KEY === 'string' ? process.env.PRIVATE_KEY : ''), {
+                                    encoding: 'utf8',
+                                    flag: 'r'
+                                });
+
+                                sign({
+                                    username: validUser.username,
+                                    'global_role': GlobalRole.NOOB
+                                }, privateKey, {
+                                        algorithm: 'RS512',
+                                        expiresIn: '3 days'
+                                    }, (err: Error, token: any) => {
+
+                                        if (err || !result.rowCount) return res.status(500).json({ reason: err.name, message: err.message });
+
+                                        return res.status(200).json({ token, 'public_key': publicKey });
+                                    });
                             })
                             .catch((err: Error) => {
                                 return res.status(500).json({ reason: err.name, message: err.message });

@@ -36,7 +36,6 @@ function checkUser(user) {
             .catch((err) => {
             return err;
         });
-        // return foundUser;
     });
 }
 exports.checkUser = checkUser;

@@ -181,7 +181,9 @@ class SignIn extends React.Component<{}, SignInState> {
             }, {})
 
         fetch.post('/signin', fields)
-            .then((_: AxiosResponse) => {
+            .then((res: AxiosResponse) => {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('public_key', res.data['public_key']);
                 this.setState({
                     ...this.state,
                     loading: false

@@ -28,6 +28,4 @@ export async function checkUser(user: Login) {
         .catch((err: Error) => {
             return err;
         })
-
-    // return foundUser;
 }
