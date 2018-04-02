@@ -11,7 +11,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 loginRouter
-    .post('/', (req: express.Request, res: express.Response) => {
+    .post('/signin', (req: express.Request, res: express.Response) => {
         const user: any = req.body;
 
         const loginValidation: LoginValidation | boolean = validateLogin(user);

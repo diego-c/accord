@@ -22,7 +22,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const signUpRouter = express.Router();
 exports.signUpRouter = signUpRouter;
 signUpRouter
-    .post('/', (req, res) => {
+    .post('/signup', (req, res) => {
     const user = req.body;
     const validation = BasicSignUpValidation_1.validateSignUp(user);
     if (typeof validation === 'boolean' && validation === false) {

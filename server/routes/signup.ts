@@ -14,7 +14,7 @@ import { sign } from 'jsonwebtoken';
 const signUpRouter: express.Router = express.Router();
 
 signUpRouter
-    .post('/', (req: express.Request, res: express.Response) => {
+    .post('/signup', (req: express.Request, res: express.Response) => {
         const user: any = req.body;
 
         const validation: boolean | SignUpValidation = validateSignUp(user);

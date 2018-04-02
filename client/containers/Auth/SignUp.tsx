@@ -56,7 +56,7 @@ interface SignUpState {
     }
 }
 
-class SignUp extends React.Component<{}, SignUpState> {
+export class SignUp extends React.Component<{}, SignUpState> {
 
     state = {
         signUpError: {
@@ -527,5 +527,3 @@ class SignUp extends React.Component<{}, SignUpState> {
             )
     }
 }
-
-export default SignUp;

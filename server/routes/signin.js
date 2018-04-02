@@ -18,7 +18,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const fs_1 = require("fs");
 const path_1 = require("path");
 loginRouter
-    .post('/', (req, res) => {
+    .post('/signin', (req, res) => {
     const user = req.body;
     const loginValidation = BasicLoginValidation_1.validateLogin(user);
     if (typeof loginValidation === 'boolean' && loginValidation === false) {

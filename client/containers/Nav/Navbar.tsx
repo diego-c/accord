@@ -1,15 +1,19 @@
 import * as React from 'react';
 import { Tabs, Tab, AppBar } from 'material-ui';
-// import classes from '../../scss/containers/Nav/Navbar.scss';
+import { SignUp } from '../Auth/SignUp';
+import { SignInWrapper } from '../Auth/SignIn';
 import classes from '../../scss/containers/Nav/NavLogo.scss';
-import { asyncComponent } from '../AsyncComponent/AsyncComponent';
 import { Link, Route } from 'react-router-dom';
 import { Home } from '../../components/Home/Home';
 import { About } from '../../components/About/About';
 
-const SignUpComponent = asyncComponent(() => import('../Auth/SignUp').then((module: any) => module.default));
+interface NavbarState {
+    value: number
+}
 
-const SignInComponent = asyncComponent(() => import('../Auth/SignIn').then((module: any) => module.default));
+interface NavbarProps {
+    isAuthenticated: boolean
+}
 
 const HomeLink: React.SFC = props => (
     <Link {...props} to="/" />
@@ -22,11 +26,15 @@ const SignInLink: React.SFC = props => (
     <Link {...props} to="/signin" />
 );
 
+const SignOutLink: React.SFC = props => (
+    <Link {...props} to="/signout" />
+);
+
 const AboutLink: React.SFC = props => (
     <Link {...props} to="/about" />
 );
 
-export class Navbar extends React.Component {
+export class Navbar extends React.Component<NavbarProps, NavbarState> {
     state = {
         value: 0
     }
@@ -36,6 +44,8 @@ export class Navbar extends React.Component {
     }
 
     render() {
+        const { isAuthenticated } = this.props;
+
         return (
             <React.Fragment>
                 <AppBar
@@ -49,8 +59,18 @@ export class Navbar extends React.Component {
                         centered
                     >
                         <Tab label="Accord" component={HomeLink} className={classes.NavLogo} />
-                        <Tab label="Sign Up" component={SignUpLink} />
-                        <Tab label="Sign In" component={SignInLink} />
+                        {
+                            isAuthenticated ?
+                                (
+                                    <Tab label="Sign out" component={SignOutLink} />
+                                ) : (
+                                    <React.Fragment>
+                                        <Tab label="Sign Up" component={SignUpLink} />
+                                        <Tab label="Sign In" component={SignInLink} />
+                                    </React.Fragment>
+                                )
+                        }
+
                         <Tab label="About" component={AboutLink} />
                     </Tabs>
                 </AppBar>
@@ -60,12 +80,12 @@ export class Navbar extends React.Component {
                 }
                 {
                     this.state.value === 1 &&
-                    <Route path="/signup" exact component={SignUpComponent} />
+                    <Route path="/signup" exact component={SignUp} />
 
                 }
                 {
                     this.state.value === 2 &&
-                    <Route path="/signin" exact component={SignInComponent} />
+                    <Route path="/signin" exact component={SignInWrapper} />
 
                 }
                 {

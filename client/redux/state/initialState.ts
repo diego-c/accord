@@ -1,15 +1,9 @@
-export type User = {
-    id: number | string | null,
-    username: string | null
-}
-
-export interface State {
-    user: User
-}
+import { State } from '../types/types';
 
 export const initialState: State = {
-    user: {
-        id: null,
-        username: null
-    }
+    test: null,
+    user: null,
+    rooms: null,
+    userInfo: null,
+    error: null
 }

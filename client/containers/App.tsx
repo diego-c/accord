@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MainLayout } from '../components/MainLayout/MainLayout';
+import { ConnectedMainLayout } from '../components/MainLayout/MainLayout';
 import { CssBaseline } from 'material-ui';
 
 class App extends React.Component<{}, {}> {
@@ -8,7 +8,7 @@ class App extends React.Component<{}, {}> {
         return (
             <React.Fragment>
                 <CssBaseline />
-                <MainLayout />
+                <ConnectedMainLayout />
             </React.Fragment>
         )
     }

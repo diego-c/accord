@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Field } from './SignUp';
 import { fetch } from '../../axios/connect';
 import { validateUsername, validatePassword } from '../../utils/UserValidation';
@@ -23,7 +24,9 @@ interface SignInState {
     formFields: SignInFields
 }
 
-class SignIn extends React.Component<{}, SignInState> {
+interface SignInProps extends RouteComponentProps<any> { }
+
+class SignIn extends React.Component<SignInProps, SignInState> {
     state = {
         signInError: {
             error: false,
@@ -187,7 +190,10 @@ class SignIn extends React.Component<{}, SignInState> {
                 this.setState({
                     ...this.state,
                     loading: false
-                })
+                });
+                if (localStorage.getItem('token') && localStorage.getItem('public_key')) {
+                    this.props.history.push('/protected');
+                }
             })
             .catch((err: CustomError) => {
                 this.setState({
@@ -320,4 +326,6 @@ class SignIn extends React.Component<{}, SignInState> {
     }
 }
 
-export default SignIn;
+const SignInWrapper = withRouter(SignIn);
+
+export { SignInWrapper }
