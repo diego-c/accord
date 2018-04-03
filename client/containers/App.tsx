@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { ConnectedMainLayout } from '../components/MainLayout/MainLayout';
+import ConnectedMainLayout from '../components/MainLayout/MainLayout';
 import { CssBaseline } from 'material-ui';
+import { Route } from 'react-router';
 
 class App extends React.Component<{}, {}> {
 
@@ -8,7 +9,9 @@ class App extends React.Component<{}, {}> {
         return (
             <React.Fragment>
                 <CssBaseline />
-                <ConnectedMainLayout />
+                <Route
+                    path="/"
+                    component={ConnectedMainLayout} />
             </React.Fragment>
         )
     }

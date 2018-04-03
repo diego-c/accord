@@ -18,6 +18,11 @@ export const reducer: Redux.Reducer<any> = (state = initialState, action: Redux.
             ...state,
             userInfo: action.payload
         }
+    } else if (action.type === actionTypes.UPDATE_ROUTE) {
+        return {
+            ...state,
+            currentRoute: action.payload
+        }
     }
     return state;
 }

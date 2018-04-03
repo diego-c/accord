@@ -3,6 +3,11 @@ import { actionTypes } from './actionTypes';
 import { fetch } from '../../axios/connect';
 import * as Axios from 'axios';
 
+export const updateRoute = (route: string) => ({
+    type: actionTypes.UPDATE_ROUTE,
+    payload: route
+});
+
 export const loadCredentials = (cred: UserInfo) => ({
     type: actionTypes.LOAD_CREDENTIALS,
     payload: cred

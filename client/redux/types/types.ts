@@ -20,6 +20,7 @@ export type Room = {
 }
 
 export interface State {
+    currentRoute: string | null,
     test: Object | null,
     user: User | null,
     rooms: Room[] | null,

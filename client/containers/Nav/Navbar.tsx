@@ -1,99 +1,88 @@
 import * as React from 'react';
 import { Tabs, Tab, AppBar } from 'material-ui';
-import { SignUp } from '../Auth/SignUp';
-import { SignInWrapper } from '../Auth/SignIn';
 import classes from '../../scss/containers/Nav/NavLogo.scss';
-import { Link, Route } from 'react-router-dom';
-import { Home } from '../../components/Home/Home';
-import { About } from '../../components/About/About';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
-interface NavbarState {
-    value: number
+const HomeLink = (props: any) => {
+    return (
+        <Link {...props} to="/" />
+    )
 }
 
-interface NavbarProps {
+const SignUpLink = (props: any) => {
+    return (
+        <Link {...props} to="/signup" />
+    )
+}
+
+const SignInLink = (props: any) => {
+    return (
+        <Link {...props} to="/signin" />
+    )
+}
+
+const AboutLink = (props: any) => {
+    return (
+        <Link {...props} to="/about" />
+    )
+}
+
+interface NavbarState {
+    value: string
+}
+
+interface NavbarProps extends RouteComponentProps<any> {
     isAuthenticated: boolean
 }
 
-const HomeLink: React.SFC = props => (
-    <Link {...props} to="/" />
-);
-
-const SignUpLink: React.SFC = props => (
-    <Link {...props} to="/signup" />
-);
-const SignInLink: React.SFC = props => (
-    <Link {...props} to="/signin" />
-);
-
-const SignOutLink: React.SFC = props => (
-    <Link {...props} to="/signout" />
-);
-
-const AboutLink: React.SFC = props => (
-    <Link {...props} to="/about" />
-);
-
-export class Navbar extends React.Component<NavbarProps, NavbarState> {
+class Navbar extends React.Component<NavbarProps, NavbarState> {
     state = {
-        value: 0
+        value: this.props.location.pathname
     }
 
-    handleTabs = (_: React.ChangeEvent<{}>, value: number) => {
-        this.setState({ value })
+    handleTabs = (_: React.ChangeEvent<{}>, value: string) => {
+        this.setState({ value });
+        this.props.history.push(value);
     }
 
     render() {
-        const { isAuthenticated } = this.props;
+        // const { isAuthenticated } = this.props;
 
         return (
-            <React.Fragment>
-                <AppBar
-                    position="sticky"
-                    color="primary"
+            <AppBar
+                position="sticky"
+                color="primary"
+            >
+                <Tabs
+                    onChange={this.handleTabs}
+                    value={this.state.value}
+                    fullWidth={true}
+                    centered
                 >
-                    <Tabs
-                        onChange={this.handleTabs}
-                        value={this.state.value}
-                        fullWidth={true}
-                        centered
-                    >
-                        <Tab label="Accord" component={HomeLink} className={classes.NavLogo} />
-                        {
-                            isAuthenticated ?
-                                (
-                                    <Tab label="Sign out" component={SignOutLink} />
-                                ) : (
-                                    <React.Fragment>
-                                        <Tab label="Sign Up" component={SignUpLink} />
-                                        <Tab label="Sign In" component={SignInLink} />
-                                    </React.Fragment>
-                                )
-                        }
+                    <Tab
+                        label="Accord"
+                        className={classes.NavLogo}
+                        value="/"
+                        component={HomeLink} />
+                    <Tab
+                        label="Sign Up"
+                        value="/signup"
+                        component={SignUpLink} />
 
-                        <Tab label="About" component={AboutLink} />
-                    </Tabs>
-                </AppBar>
-                {
-                    this.state.value === 0 &&
-                    <Route path="/" exact component={Home} />
-                }
-                {
-                    this.state.value === 1 &&
-                    <Route path="/signup" exact component={SignUp} />
+                    <Tab
+                        label="Sign In"
+                        value="/signin"
+                        component={SignInLink} />
 
-                }
-                {
-                    this.state.value === 2 &&
-                    <Route path="/signin" exact component={SignInWrapper} />
-
-                }
-                {
-                    this.state.value === 3 &&
-                    <Route path="/about" exact component={About} />
-
-                }
-            </React.Fragment>
+                    <Tab
+                        label="About"
+                        value="/about"
+                        component={AboutLink} />
+                </Tabs>
+            </AppBar>
         )
     }
 }
+
+export default withRouter(Navbar);

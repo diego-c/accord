@@ -43,7 +43,7 @@ loginRouter
                         'global_role': checked.global_role
                     }, privateKey, {
                         algorithm: 'RS512',
-                        expiresIn: '3 days'
+                        expiresIn: '60'
                     }, (err, token) => {
                         if (err)
                             return res.status(500).json({ reason: err.name, message: err.message });

@@ -1,4 +1,5 @@
 import * as Express from 'express';
+import { verify } from 'jsonwebtoken';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -13,12 +14,21 @@ authRouter
         });
 
         const reqPublicKey = req.body.publicKey;
+        const reqToken = req.body.token;
 
-        if (publicKey === reqPublicKey) {
-            return res.status(200).json({ message: 'public key matches!' });
-        } else {
-            return res.status(403).json({ message: 'invalid public key' });
-        }
+        verify(reqToken, publicKey, {
+            algorithms: ['RS512'],
+            ignoreExpiration: false
+        }, (err, decoded) => {
+            if (err) return res.status(403).json({ reason: err.name, message: err.message });
+
+            if (publicKey === reqPublicKey) {
+                return res.status(200).json({ message: 'public key matches!', token: decoded });
+            } else {
+                return res.status(403).json({ message: 'invalid public key' });
+            }
+        })
     });
+
 
 export { authRouter };
