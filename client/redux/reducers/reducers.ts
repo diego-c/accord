@@ -6,7 +6,7 @@ export const reducer: Redux.Reducer<any> = (state = initialState, action: Redux.
     if (action.type === actionTypes.LOAD_USER_SUCCESS) {
         return {
             ...state,
-            test: action.payload
+            user: action.payload.token.username
         }
     } else if (action.type === actionTypes.LOAD_USER_FAILURE) {
         return {

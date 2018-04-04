@@ -33,22 +33,29 @@ interface NavbarState {
 }
 
 interface NavbarProps extends RouteComponentProps<any> {
-    isAuthenticated: boolean
+    isAuth: boolean
 }
+
+const Routes = ['/', '/signup', '/signin', '/about'];
 
 class Navbar extends React.Component<NavbarProps, NavbarState> {
     state = {
-        value: this.props.location.pathname
+        value: '/'
+    }
+
+    componentDidMount() {
+        if (!Routes.includes(this.props.location.pathname)) {
+            this.setState({ value: '/signin' });
+        } else {
+            this.setState({ value: this.props.location.pathname });
+        }
     }
 
     handleTabs = (_: React.ChangeEvent<{}>, value: string) => {
         this.setState({ value });
-        this.props.history.push(value);
     }
 
     render() {
-        // const { isAuthenticated } = this.props;
-
         return (
             <AppBar
                 position="sticky"

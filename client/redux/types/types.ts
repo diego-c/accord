@@ -3,7 +3,7 @@ import * as Axios from 'axios';
 
 export type User = {
     username: string,
-    global_role: string
+    global_role?: string
 }
 
 export enum Role {
@@ -29,8 +29,8 @@ export interface State {
 }
 
 export interface UserInfo {
-    token: string,
-    publicKey: string
+    token: string | null,
+    publicKey: string | null
 }
 
 export interface UserResponse extends Redux.Action {

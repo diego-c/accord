@@ -4,13 +4,17 @@ import { validateUsername, validatePassword } from '../../utils/UserValidation';
 import { Paper, Grid, TextField, FormHelperText, Button } from 'material-ui';
 import { CircularProgress } from 'material-ui';
 import { Notification } from '../../components/Notification/Notification';
+import { fetch } from '../../axios/connect';
+import { CustomError } from '../../errors/CustomError'
+import { AxiosResponse } from 'axios';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 interface SignInFields {
     username: Field,
     password: Field
 }
 
-/* interface SignInState {
+interface SignInState {
     signInError: {
         error: boolean,
         message: string
@@ -18,11 +22,11 @@ interface SignInFields {
     canSubmit: boolean,
     loading: boolean,
     formFields: SignInFields
-} */
+}
 
-// interface SignInProps { }
+interface SignInProps extends RouteComponentProps<any> { }
 
-class SignIn extends React.Component {
+class SignIn extends React.Component<SignInProps, SignInState> {
     state = {
         signInError: {
             error: false,
@@ -167,9 +171,9 @@ class SignIn extends React.Component {
             loading: true
         });
 
-        // const { formFields } = this.state;
+        const { formFields } = this.state;
 
-        /* const fields = Object.keys(formFields).map(f => {
+        const fields = Object.keys(formFields).map(f => {
             return {
                 [f]: (formFields as any)[f].value
             }
@@ -177,9 +181,10 @@ class SignIn extends React.Component {
             .reduce((acc: { [k: string]: string }, field, index, arr) => {
                 acc[Object.keys(arr[index])[0]] = Object.values(field)[0];
                 return acc;
-            }, {}) */
+            }, {})
 
-        /* fetch.post('/signin', fields)
+        fetch
+            .post('/signin', fields)
             .then((res: AxiosResponse) => {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('public_key', res.data['public_key']);
@@ -200,7 +205,7 @@ class SignIn extends React.Component {
                         message: err.response.data.message
                     }
                 })
-            }) */
+            })
     }
 
     handleNotification = (_: React.SyntheticEvent<any>, __: string) => {
@@ -322,6 +327,4 @@ class SignIn extends React.Component {
     }
 }
 
-// const SignInWrapper = withRouter(SignIn);
-
-export { SignIn }
+export default withRouter(SignIn);
