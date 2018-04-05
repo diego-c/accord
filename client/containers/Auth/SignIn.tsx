@@ -67,10 +67,6 @@ class SignIn extends React.Component<SignInProps, SignInState> {
     }
 
     componentDidMount() {
-        if (Boolean(this.props.user)) {
-            this.props.history.push('/protected');
-        }
-
         this.setState({
             ...this.state,
             loading: false
