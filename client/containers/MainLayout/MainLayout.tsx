@@ -25,8 +25,12 @@ interface MainLayoutState {
 
 class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
 
-    state = {
-        error: false
+    constructor(props: MainLayoutProps) {
+        super(props);
+        this.state = {
+            error: false
+        }
+        this.fetchUser();
     }
 
     componentDidUpdate() {
@@ -37,7 +41,7 @@ class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
         }
     }
 
-    componentDidMount() {
+    fetchUser = () => {
         const token = localStorage.getItem('token');
         const publicKey = localStorage.getItem('public_key');
 

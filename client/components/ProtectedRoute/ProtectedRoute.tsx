@@ -16,14 +16,15 @@ interface ProtectedRouteProps {
     routeProps: RouteProps,
     Component: React.SFC<any> | React.ComponentClass<any>
 }
-export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ isAuth, Component, ...routeProps }) => {
-    return <Route {...routeProps} render={(ownProps) => (
+export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ isAuth, Component, routeProps: { location, path } }) => {
+    console.log('Protected route isAuth: \n' + isAuth);
+    return <Route path={path} render={(ownProps) => (
         isAuth ? (
             <Component {...ownProps} />
         ) : (
                 <Redirect to={{
                     pathname: '/signin',
-                    state: { from: routeProps.routeProps.location }
+                    state: { from: location }
                 }} />
             )
     )} />

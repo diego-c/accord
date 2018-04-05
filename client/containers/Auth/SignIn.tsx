@@ -7,7 +7,9 @@ import { Notification } from '../../components/Notification/Notification';
 import { fetch } from '../../axios/connect';
 import { CustomError } from '../../errors/CustomError'
 import { AxiosResponse } from 'axios';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { RouteComponentProps, withRouter, Redirect } from 'react-router';
+import { State, User } from '../../redux/types/types';
+import { connect } from 'react-redux';
 
 interface SignInFields {
     username: Field,
@@ -24,7 +26,9 @@ interface SignInState {
     formFields: SignInFields
 }
 
-interface SignInProps extends RouteComponentProps<any> { }
+interface SignInProps extends RouteComponentProps<any> {
+    user: User | null
+}
 
 class SignIn extends React.Component<SignInProps, SignInState> {
     state = {
@@ -63,6 +67,10 @@ class SignIn extends React.Component<SignInProps, SignInState> {
     }
 
     componentDidMount() {
+        if (Boolean(this.props.user)) {
+            this.props.history.push('/protected');
+        }
+
         this.setState({
             ...this.state,
             loading: false
@@ -223,6 +231,7 @@ class SignIn extends React.Component<SignInProps, SignInState> {
         const { loading } = this.state;
         const { error } = this.state.signInError;
         const { message: errorMsg } = this.state.signInError;
+        const { user } = this.props;
 
         return loading ?
             (
@@ -237,94 +246,103 @@ class SignIn extends React.Component<SignInProps, SignInState> {
                     </Grid>
                 </Grid>
             )
-            : (
-                <React.Fragment>
-                    <Notification
-                        open={error}
-                        vertical="top"
-                        horizontal="center"
-                        message={errorMsg}
-                        close={this.handleNotification}
-                    />
+            :
+            Boolean(user) ?
+                (
+                    <Redirect to="/protected" />
+                )
+                : (
+                    <React.Fragment>
+                        <Notification
+                            open={error}
+                            vertical="top"
+                            horizontal="center"
+                            message={errorMsg}
+                            close={this.handleNotification}
+                        />
 
-                    <Paper elevation={4} style={{
-                        padding: '1rem'
-                    }}>
-                        <form action="#" method="POST" style={{
-                            width: 'calc(100% - 16px)'
-                        }
-                        }>
-                            <Grid
-                                container
-                                alignItems="center"
-                                spacing={8}
-                                alignContent="center"
-                                direction="column"
-                                style={{ padding: '3rem' }}>
-                                {
-                                    Object.keys(formFields).map((field, index) => (
-                                        <Grid
-                                            item xs={12}
-                                            xl={6}
-                                            key={index}
-                                        >
-                                            <TextField
+                        <Paper elevation={4} style={{
+                            padding: '1rem'
+                        }}>
+                            <form action="#" method="POST" style={{
+                                width: 'calc(100% - 16px)'
+                            }
+                            }>
+                                <Grid
+                                    container
+                                    alignItems="center"
+                                    spacing={8}
+                                    alignContent="center"
+                                    direction="column"
+                                    style={{ padding: '3rem' }}>
+                                    {
+                                        Object.keys(formFields).map((field, index) => (
+                                            <Grid
+                                                item xs={12}
+                                                xl={6}
                                                 key={index}
+                                            >
+                                                <TextField
+                                                    key={index}
 
-                                                name={field}
+                                                    name={field}
 
-                                                type={(formFields as any)[field].type}
+                                                    type={(formFields as any)[field].type}
 
-                                                label={(formFields as any)[field].label}
+                                                    label={(formFields as any)[field].label}
 
-                                                value={(formFields as any)[field].value}
+                                                    value={(formFields as any)[field].value}
 
-                                                required={(formFields as any)[field].required}
+                                                    required={(formFields as any)[field].required}
 
-                                                onChange={this.handleChange}
-                                                margin="normal"
+                                                    onChange={this.handleChange}
+                                                    margin="normal"
 
-                                                onBlur={e => this.handleTouch(e, field)}
+                                                    onBlur={e => this.handleTouch(e, field)}
 
-                                                error={
+                                                    error={
+                                                        (formFields as any)[field].touched
+                                                        &&
+                                                        (formFields as any)[field].validation.error
+                                                    }
+                                                />
+                                                {
                                                     (formFields as any)[field].touched
-                                                    &&
-                                                    (formFields as any)[field].validation.error
+                                                        &&
+                                                        (formFields as any)[field].validation.error ?
+                                                        (
+                                                            (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
+                                                                <FormHelperText
+                                                                    key={index}
+                                                                    error={true}>
+                                                                    {msg}
+                                                                </FormHelperText>
+                                                            ))
+                                                        ) : null
                                                 }
-                                            />
-                                            {
-                                                (formFields as any)[field].touched
-                                                    &&
-                                                    (formFields as any)[field].validation.error ?
-                                                    (
-                                                        (formFields as any)[field].validation.errorMsgs.map((msg: string, index: number) => (
-                                                            <FormHelperText
-                                                                key={index}
-                                                                error={true}>
-                                                                {msg}
-                                                            </FormHelperText>
-                                                        ))
-                                                    ) : null
-                                            }
-                                        </Grid>
-                                    ))
-                                }
-                                <Button
-                                    variant="raised"
-                                    size="large"
-                                    color="primary"
-                                    disabled={!this.state.canSubmit}
-                                    onClick={this.handleSubmit}
-                                    style={{ marginTop: '3rem' }}
-                                >
-                                    Sign In
+                                            </Grid>
+                                        ))
+                                    }
+                                    <Button
+                                        variant="raised"
+                                        size="large"
+                                        color="primary"
+                                        disabled={!this.state.canSubmit}
+                                        onClick={this.handleSubmit}
+                                        style={{ marginTop: '3rem' }}
+                                    >
+                                        Sign In
                         </Button>
-                            </Grid>
-                        </form >
-                    </Paper >
-                </React.Fragment>
-            )
+                                </Grid>
+                            </form >
+                        </Paper >
+                    </React.Fragment>
+                )
     }
 }
 
-export default withRouter(SignIn);
+const mapStateToProps = (state: State) => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps, null)(withRouter(SignIn) as React.ComponentClass<any>);
