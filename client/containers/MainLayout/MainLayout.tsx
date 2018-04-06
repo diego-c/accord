@@ -70,6 +70,7 @@ class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
                     <Route path="/signup" exact component={SignUp} />
                     <Route path="/signin" exact component={SignIn} />
                     <Route path="/about" exact component={About} />
+                    <Route path="/signout" exact component={SignOut} />
 
                     <ProtectedRoute
                         routeProps={{
@@ -78,15 +79,6 @@ class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
                         }}
                         Component={Protected}
                         isAuth={Boolean(this.props.user && !this.state.error)} />
-
-                    <ProtectedRoute
-                        routeProps={{
-                            exact: true,
-                            path: '/signout'
-                        }}
-                        Component={SignOut}
-                        isAuth={Boolean(this.props.user && !this.state.error)} />
-
                 </Switch>
             </React.Fragment>
         )

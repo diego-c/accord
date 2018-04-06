@@ -54,7 +54,6 @@ class Navbar extends React.PureComponent<NavbarProps, NavbarState> {
     }
 
     componentDidUpdate() {
-        console.log('Navbar updated: user - ' + JSON.stringify(this.props.user, null, 2));
         if (Boolean(this.props.user)) {
             this.setState({
                 loading: false
