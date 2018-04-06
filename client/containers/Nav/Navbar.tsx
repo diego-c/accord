@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Tabs, Tab, AppBar } from 'material-ui';
+import { Tabs, Tab, AppBar, CircularProgress } from 'material-ui';
 import classes from '../../scss/containers/Nav/NavLogo.scss';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
+import { State, User } from '../../redux/types/types';
+import { connect } from 'react-redux';
 
 const HomeLink = (props: any) => {
     return (
@@ -28,19 +30,36 @@ const AboutLink = (props: any) => {
     )
 }
 
+const SignOutLink = (props: any) => {
+    return (
+        <Link {...props} to="/signout" />
+    )
+}
+
 interface NavbarState {
-    value: string
+    value: string,
+    loading: boolean
 }
 
 interface NavbarProps extends RouteComponentProps<any> {
-    isAuth: boolean
+    user: User | null
 }
 
-const Routes = ['/', '/signup', '/signin', '/about'];
+const Routes = ['/', '/signup', '/signin', '/about', '/signout'];
 
-class Navbar extends React.Component<NavbarProps, NavbarState> {
+class Navbar extends React.PureComponent<NavbarProps, NavbarState> {
     state = {
-        value: '/'
+        value: '/',
+        loading: true
+    }
+
+    componentDidUpdate() {
+        console.log('Navbar updated: user - ' + JSON.stringify(this.props.user, null, 2));
+        if (Boolean(this.props.user)) {
+            this.setState({
+                loading: false
+            })
+        }
     }
 
     componentDidMount() {
@@ -56,7 +75,9 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
     }
 
     render() {
-        return (
+        const { loading } = this.state;
+
+        return loading ? <CircularProgress /> : (
             <AppBar
                 position="sticky"
                 color="primary"
@@ -72,15 +93,26 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
                         className={classes.NavLogo}
                         value="/"
                         component={HomeLink} />
-                    <Tab
-                        label="Sign Up"
-                        value="/signup"
-                        component={SignUpLink} />
+                    {
+                        Boolean(this.props.user) ? (
+                            <Tab
+                                label="Sign Out"
+                                value="/signout"
+                                component={SignOutLink} />
+                        ) : (
+                                <React.Fragment>
+                                    <Tab
+                                        label="Sign Up"
+                                        value="/signup"
+                                        component={SignUpLink} />
 
-                    <Tab
-                        label="Sign In"
-                        value="/signin"
-                        component={SignInLink} />
+                                    <Tab
+                                        label="Sign In"
+                                        value="/signin"
+                                        component={SignInLink} />
+                                </React.Fragment>
+                            )
+                    }
 
                     <Tab
                         label="About"
@@ -92,4 +124,10 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
     }
 }
 
-export default withRouter(Navbar);
+const mapStateToProps = (state: State) => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, null)(withRouter(Navbar) as React.ComponentClass<any>);

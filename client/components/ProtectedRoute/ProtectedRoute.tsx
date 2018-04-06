@@ -17,7 +17,6 @@ interface ProtectedRouteProps {
     Component: React.SFC<any> | React.ComponentClass<any>
 }
 export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ isAuth, Component, routeProps: { location, path } }) => {
-    console.log('Protected route isAuth: \n' + isAuth);
     return <Route path={path} render={(ownProps) => (
         isAuth ? (
             <Component {...ownProps} />

@@ -12,6 +12,7 @@ import Protected from '../../components/Protected/Protected';
 import { Notification } from '../../components/Notification/Notification';
 import { ProtectedRoute } from '../../components/ProtectedRoute/ProtectedRoute';
 import { AxiosError } from 'axios';
+import SignOut from '../../components/SignOut/SignOut';
 
 interface MainLayoutProps {
     user: User | null,
@@ -63,7 +64,7 @@ class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
                     close={this.handleNotification}
                 />
 
-                <Navbar isAuth={Boolean(this.props.user && !this.state.error)} />
+                <Navbar />
                 <Switch>
                     <Route path="/" exact component={Home} />
                     <Route path="/signup" exact component={SignUp} />
@@ -72,9 +73,18 @@ class MainLayout extends React.PureComponent<MainLayoutProps, MainLayoutState> {
 
                     <ProtectedRoute
                         routeProps={{
+                            exact: true,
                             path: '/protected'
                         }}
                         Component={Protected}
+                        isAuth={Boolean(this.props.user && !this.state.error)} />
+
+                    <ProtectedRoute
+                        routeProps={{
+                            exact: true,
+                            path: '/signout'
+                        }}
+                        Component={SignOut}
                         isAuth={Boolean(this.props.user && !this.state.error)} />
 
                 </Switch>
