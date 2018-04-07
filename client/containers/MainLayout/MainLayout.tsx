@@ -12,7 +12,7 @@ import Protected from '../../components/Protected/Protected';
 import { Notification } from '../../components/Notification/Notification';
 import { ProtectedRoute } from '../../components/ProtectedRoute/ProtectedRoute';
 import { AxiosError } from 'axios';
-import SignOut from '../../components/SignOut/SignOut';
+import SignOut from '../Auth/SignOut';
 
 interface MainLayoutProps {
     user: User | null,
